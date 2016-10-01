@@ -1,4 +1,4 @@
-package io.objectbox.performanceapp;
+package io.objectbox.performanceapp.greendao;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -9,13 +9,10 @@ import org.greenrobot.greendao.query.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.objectbox.performanceapp.greendao.DaoMaster;
+import io.objectbox.performanceapp.PerfTest;
+import io.objectbox.performanceapp.PerfTestRunner;
+import io.objectbox.performanceapp.TestType;
 import io.objectbox.performanceapp.greendao.DaoMaster.DevOpenHelper;
-import io.objectbox.performanceapp.greendao.DaoSession;
-import io.objectbox.performanceapp.greendao.SimpleEntityNotNull;
-import io.objectbox.performanceapp.greendao.SimpleEntityNotNullDao;
-import io.objectbox.performanceapp.greendao.SimpleEntityNotNullIndexed;
-import io.objectbox.performanceapp.greendao.SimpleEntityNotNullIndexedDao;
 import io.objectbox.performanceapp.greendao.SimpleEntityNotNullIndexedDao.Properties;
 
 /**

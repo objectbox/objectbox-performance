@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.objectbox.performanceapp.PerfTestRunner.Callback;
+import io.objectbox.performanceapp.greendao.GreendaoPerfTest;
 
 public class MainActivity extends Activity implements Callback {
     TestType[] TYPES = {
