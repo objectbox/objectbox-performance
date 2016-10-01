@@ -41,6 +41,7 @@ public class MainActivity extends Activity implements Callback {
                 if (currentFocus != null) {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(currentFocus.getWindowToken(), 0);
+                    currentFocus.clearFocus();
                 }
                 boolean objectBox = ((CheckBox) findViewById(R.id.checkBoxObjectBox)).isChecked();
                 boolean realm = ((CheckBox) findViewById(R.id.checkBoxRealm)).isChecked();
