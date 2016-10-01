@@ -18,8 +18,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:text="ObjectBox"
-        android:checked="true"/>
+        android:checked="true"
+        android:text="ObjectBox"/>
 
     <CheckBox
         android:id="@+id/checkBoxRealm"
@@ -41,17 +41,6 @@
         android:layout_toRightOf="@+id/checkBoxRealm"
         android:text="SQLite"/>
 
-    <Button
-        android:id="@+id/buttonRunTest"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/spinnerTestType"
-        android:layout_marginTop="16dp"
-        android:text="Run Test(s)"/>
 
     <Spinner
         android:id="@+id/spinnerTestType"
@@ -62,17 +51,62 @@
         android:layout_below="@+id/checkBoxObjectBox"
         android:layout_marginTop="8dp"/>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+
+    <TextView
+        android:id="@+id/textViewRuns"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/buttonRunTest">
+        android:layout_below="@+id/spinnerTestType"
+        android:layout_marginTop="8dp"
+        android:text="Test Runs / Number of Entities:"/>
 
-        <TextView
-            android:id="@+id/textViewResults"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </ScrollView>
+
+    <EditText
+        android:id="@+id/editTextRuns"
+        android:layout_width="48sp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textViewRuns"
+        android:ems="10"
+        android:inputType="number"
+        android:text="8"/>
+
+
+    <EditText
+        android:id="@+id/editTextNumberEntities"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewRuns"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_toEndOf="@+id/editTextRuns"
+        android:layout_toRightOf="@+id/editTextRuns"
+        android:ems="10"
+        android:inputType="number"
+        android:text="10000"/>
+
+    <Button
+        android:id="@+id/buttonRunTest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/editTextRuns"
+        android:layout_marginTop="16dp"
+        android:text="Run Test(s)"/>
+
+    <TextView
+        android:id="@+id/textViewResults"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/buttonRunTest"
+        android:gravity="bottom"
+        tools:text="Logging"
+        android:scrollbars="vertical"/>
 
 </RelativeLayout>

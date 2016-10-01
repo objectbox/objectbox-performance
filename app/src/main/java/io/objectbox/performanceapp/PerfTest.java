@@ -2,7 +2,6 @@ package io.objectbox.performanceapp;
 
 import android.content.Context;
 import android.os.Environment;
-import android.widget.TextView;
 
 import java.io.File;
 import java.util.Random;
@@ -12,18 +11,13 @@ import java.util.Random;
  */
 public abstract class PerfTest {
 
-    protected final int runs = 8;
-    protected int count = 10000;
-    protected final Random random;
-
+    protected Random random;
     protected Context context;
-    private PerfTestRunner testRunner;
-
-    PerfTest() {
-        random = new Random();
-    }
+    protected PerfTestRunner testRunner;
+    protected int numberEntities;
 
     public void setUp(Context context, PerfTestRunner testRunner) {
+        random = new Random();
         this.context = context.getApplicationContext();
         this.testRunner = testRunner;
     }
@@ -54,4 +48,8 @@ public abstract class PerfTest {
     public abstract String name();
 
     public abstract void run(TestType type);
+
+    public void setNumberEntities(int numberEntities) {
+        this.numberEntities = numberEntities;
+    }
 }

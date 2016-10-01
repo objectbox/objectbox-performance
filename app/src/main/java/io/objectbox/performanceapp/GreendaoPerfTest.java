@@ -38,33 +38,33 @@ public class GreendaoPerfTest extends PerfTest {
     }
 
     public void runBatchPerfTest() {
-        List<SimpleEntityNotNull> list = new ArrayList<>(count);
-        for (int i = 0; i < count; i++) {
+        List<SimpleEntityNotNull> list = new ArrayList<>(numberEntities);
+        for (int i = 0; i < numberEntities; i++) {
             list.add(createEntity((long) i));
         }
         Benchmark benchmark = getBenchmark("greendao-batch");
         benchmark.start("insert");
         dao.insertInTx(list);
-        benchmark.stop();
+        log(benchmark.stop());
 
         for (SimpleEntityNotNull entity : list) {
             changeForUpdate(entity);
         }
         benchmark.start("update");
         dao.updateInTx(list);
-        benchmark.stop();
+        log(benchmark.stop());
 
         benchmark.start("load");
         List<SimpleEntityNotNull> reloaded = dao.loadAll();
-        benchmark.stop();
+        log(benchmark.stop());
 
         benchmark.start("access");
         accessAll(reloaded);
-        benchmark.stop();
+        log(benchmark.stop());
 
         benchmark.start("delete");
         dao.deleteAll();
-        benchmark.stop();
+        log(benchmark.stop());
     }
 
     protected void changeForUpdate(SimpleEntityNotNull entity) {

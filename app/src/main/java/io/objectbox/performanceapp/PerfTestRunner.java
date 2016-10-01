@@ -21,14 +21,18 @@ public class PerfTestRunner {
     private final Activity activity;
     private final Callback callback;
     private final TextView textViewResults;
+    private final int runs;
+    private final int numberEntities;
 
     boolean running;
     boolean destroyed;
 
-    public PerfTestRunner(Activity activity, Callback callback, TextView textViewResults) {
+    public PerfTestRunner(Activity activity, Callback callback, TextView textViewResults, int runs, int numberEntities) {
         this.activity = activity;
         this.callback = callback;
         this.textViewResults = textViewResults;
+        this.runs = runs;
+        this.numberEntities = numberEntities;
     }
 
     public void run(final TestType type, final List<PerfTest> tests) {
@@ -82,10 +86,13 @@ public class PerfTestRunner {
     }
 
     private void run(TestType type, PerfTest test) {
-        log("Starting " + test.name() + " " + test);
-//        test.setTextViewLogger(textViewResults);
-        test.setUp(activity, this);
-        test.run(type);
-        test.tearDown();
+        test.setNumberEntities(numberEntities);
+        for (int i = 1; i <= runs; i++) {
+            log("\nStarting " + test.name() + " " + type + " (" + i + "/" + runs + ")\n" +
+                    "------------------------------");
+            test.setUp(activity, this);
+            test.run(type);
+            test.tearDown();
+        }
     }
 }

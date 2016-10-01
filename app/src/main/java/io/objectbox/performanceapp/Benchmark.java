@@ -150,7 +150,7 @@ public class Benchmark {
         }
     }
 
-    public void stop() {
+    public String stop() {
         long time = SystemClock.elapsedRealtime() - timeMillis;
         long timeThread = SystemClock.currentThreadTimeMillis() - threadTimeMillis;
         if (!started) {
@@ -158,12 +158,13 @@ public class Benchmark {
         }
         started = false;
 
-        Log.d(TAG, name + ": " + time + " ms (thread: " + timeThread + " ms)");
+        String logMessage = name + ": " + time + " ms (thread: " + timeThread + " ms)";
         values.add(new Pair<>(name, Long.toString(time)));
         if (storeThreadTime) {
             values.add(new Pair<>(name + "-thread", Long.toString(timeThread)));
         }
         name = null;
+        return logMessage;
     }
 
     public void commit() {
