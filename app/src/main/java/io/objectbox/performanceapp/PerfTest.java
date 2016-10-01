@@ -44,9 +44,19 @@ public abstract class PerfTest {
         benchmark.start(name);
     }
 
-
     protected void stopBenchmark() {
         log(benchmark.stop());
+    }
+
+    public String randomString() {
+        return RandomValues.createRandomString(random, 0, 200);
+    }
+
+    public byte[] randomBytes() {
+        int length = random.nextInt(200);
+        byte[] bytes = new byte[length];
+        random.nextBytes(bytes);
+        return bytes;
     }
 
 }

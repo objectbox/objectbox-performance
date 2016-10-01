@@ -38,6 +38,10 @@ public class GreendaoPerfTest extends PerfTest {
 
     public void setUp(Context context, PerfTestRunner testRunner) {
         super.setUp(context, testRunner);
+        boolean deleted = context.deleteDatabase(DB_NAME);
+        if (deleted) {
+            log("DB existed before start - deleted");
+        }
         db = new DevOpenHelper(context, DB_NAME).getWritableDb();
         daoSession = new DaoMaster(db).newSession();
         dao = daoSession.getSimpleEntityNotNullDao();
@@ -83,7 +87,7 @@ public class GreendaoPerfTest extends PerfTest {
         stopBenchmark();
 
         for (SimpleEntityNotNull entity : list) {
-            changeForUpdate(entity);
+            setRandomValues(entity);
         }
         startBenchmark("update");
         dao.updateInTx(list);
@@ -102,30 +106,24 @@ public class GreendaoPerfTest extends PerfTest {
         stopBenchmark();
     }
 
-    protected void changeForUpdate(SimpleEntityNotNull entity) {
+    protected void setRandomValues(SimpleEntityNotNull entity) {
+        entity.setSimpleBoolean(random.nextBoolean());
+        entity.setSimpleByte((byte) random.nextInt());
+        entity.setSimpleShort((short) random.nextInt());
         entity.setSimpleInt(random.nextInt());
         entity.setSimpleLong(random.nextLong());
-        entity.setSimpleBoolean(random.nextBoolean());
         entity.setSimpleDouble(random.nextDouble());
         entity.setSimpleFloat(random.nextFloat());
-        entity.setSimpleString("Another " + entity.getSimpleString());
+        entity.setSimpleString(randomString());
+        entity.setSimpleByteArray(randomBytes());
     }
 
-    public static SimpleEntityNotNull createEntity(Long key) {
+    public SimpleEntityNotNull createEntity(Long key) {
         SimpleEntityNotNull entity = new SimpleEntityNotNull();
         if (key != null) {
             entity.setId(key);
         }
-        entity.setSimpleBoolean(true);
-        entity.setSimpleByte(Byte.MAX_VALUE);
-        entity.setSimpleShort(Short.MAX_VALUE);
-        entity.setSimpleInt(Integer.MAX_VALUE);
-        entity.setSimpleLong(Long.MAX_VALUE);
-        entity.setSimpleFloat(Float.MAX_VALUE);
-        entity.setSimpleDouble(Double.MAX_VALUE);
-        entity.setSimpleString("greenrobot greenDAO");
-        byte[] bytes = {42, -17, 23, 0, 127, -128};
-        entity.setSimpleByteArray(bytes);
+        setRandomValues(entity);
         return entity;
     }
 
@@ -155,7 +153,7 @@ public class GreendaoPerfTest extends PerfTest {
         stopBenchmark();
 
         for (SimpleEntityNotNullIndexed entity : list) {
-            changeForUpdateIndexed(entity);
+            setRandomValues(entity);
         }
         startBenchmark("update");
         daoIndexed.updateInTx(list);
@@ -174,30 +172,24 @@ public class GreendaoPerfTest extends PerfTest {
         stopBenchmark();
     }
 
-    protected void changeForUpdateIndexed(SimpleEntityNotNullIndexed entity) {
+    protected void setRandomValues(SimpleEntityNotNullIndexed entity) {
+        entity.setSimpleBoolean(random.nextBoolean());
+        entity.setSimpleByte((byte) random.nextInt());
+        entity.setSimpleShort((short) random.nextInt());
         entity.setSimpleInt(random.nextInt());
         entity.setSimpleLong(random.nextLong());
-        entity.setSimpleBoolean(random.nextBoolean());
         entity.setSimpleDouble(random.nextDouble());
         entity.setSimpleFloat(random.nextFloat());
-        entity.setSimpleString("Another " + entity.getSimpleString());
+        entity.setSimpleString(randomString());
+        entity.setSimpleByteArray(randomBytes());
     }
 
-    public static SimpleEntityNotNullIndexed createEntityIndexed(Long key) {
+    public SimpleEntityNotNullIndexed createEntityIndexed(Long key) {
         SimpleEntityNotNullIndexed entity = new SimpleEntityNotNullIndexed();
         if (key != null) {
             entity.setId(key);
         }
-        entity.setSimpleBoolean(true);
-        entity.setSimpleByte(Byte.MAX_VALUE);
-        entity.setSimpleShort(Short.MAX_VALUE);
-        entity.setSimpleInt(Integer.MAX_VALUE);
-        entity.setSimpleLong(Long.MAX_VALUE);
-        entity.setSimpleFloat(Float.MAX_VALUE);
-        entity.setSimpleDouble(Double.MAX_VALUE);
-        entity.setSimpleString("greenrobot greenDAO");
-        byte[] bytes = {42, -17, 23, 0, 127, -128};
-        entity.setSimpleByteArray(bytes);
+        setRandomValues(entity);
         return entity;
     }
 
