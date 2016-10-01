@@ -5,9 +5,6 @@ import io.objectbox.annotation.Generated;
 import io.objectbox.annotation.Id;
 import io.objectbox.annotation.NotNull;
 
-/**
- * Entity mapped to table "SIMPLE_ENTITY_NOT_NULL".
- */
 @Entity
 public class SimpleEntity {
 
@@ -116,7 +113,6 @@ public class SimpleEntity {
         return simpleString;
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setSimpleString(@NotNull String simpleString) {
         this.simpleString = simpleString;
     }
@@ -126,7 +122,6 @@ public class SimpleEntity {
         return simpleByteArray;
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setSimpleByteArray(@NotNull byte[] simpleByteArray) {
         this.simpleByteArray = simpleByteArray;
     }
