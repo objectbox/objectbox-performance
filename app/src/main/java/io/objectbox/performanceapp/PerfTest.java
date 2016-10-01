@@ -2,10 +2,8 @@ package io.objectbox.performanceapp;
 
 import android.content.Context;
 import android.os.Environment;
-import android.util.Log;
 import android.widget.TextView;
 
-import java.io.Closeable;
 import java.io.File;
 import java.util.Random;
 
@@ -19,21 +17,18 @@ public abstract class PerfTest {
     protected final Random random;
 
     protected Context context;
-    protected TextView textViewLogger;
+    private PerfTestRunner testRunner;
 
     PerfTest() {
         random = new Random();
     }
 
-    public void setUp(Context context) {
+    public void setUp(Context context, PerfTestRunner testRunner) {
         this.context = context.getApplicationContext();
+        this.testRunner = testRunner;
     }
 
     public void tearDown() {
-    }
-
-    public void setTextViewLogger(TextView textViewLogger) {
-        this.textViewLogger = textViewLogger;
     }
 
     protected Benchmark getBenchmark(String name) {
@@ -53,11 +48,10 @@ public abstract class PerfTest {
     }
 
     protected void log(String text) {
-        Log.d("PERF", text);
-        if (textViewLogger != null) {
-            textViewLogger.append(text.concat("\n"));
-        }
+        testRunner.log(text);
     }
 
-    public abstract void runBatchPerfTest();
+    public abstract String name();
+
+    public abstract void run(TestType type);
 }

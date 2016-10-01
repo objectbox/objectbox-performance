@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -12,21 +13,26 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends Activity {
+import io.objectbox.performanceapp.PerfTestRunner.Callback;
+
+public class MainActivity extends Activity implements Callback {
     TestType[] TYPES = {
             new TestType(TestType.BULK_OPERATIONS),
             new TestType(TestType.BULK_OPERATIONS_INDEXED),
             new TestType(TestType.LOOK_UP_STRING_INDEX),
     };
     private TextView textViewResults;
+    private Button buttonRun;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        findViewById(R.id.buttonRunTest).setOnClickListener(new OnClickListener() {
+        buttonRun = (Button) findViewById(R.id.buttonRunTest);
+        buttonRun.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                buttonRun.setEnabled(false);
                 boolean objectBox = ((CheckBox) findViewById(R.id.checkBoxObjectBox)).isChecked();
                 boolean realm = ((CheckBox) findViewById(R.id.checkBoxRealm)).isChecked();
                 boolean sqlite = ((CheckBox) findViewById(R.id.checkBoxSQLite)).isChecked();
@@ -43,37 +49,21 @@ public class MainActivity extends Activity {
     private void runTests(TestType type, boolean objectBox, boolean realm, boolean sqlite) {
         textViewResults.setText("");
         List<PerfTest> tests = new ArrayList<>();
-        switch (type.name) {
-            case TestType.BULK_OPERATIONS:
-                if (sqlite) {
-                    GreendaoPerfTest test = new GreendaoPerfTest();
-                    tests.add(test);
-                    test.setTextViewLogger(textViewResults);
-                    test.setUp(this);
-                    test.runBatchPerfTest();
-                    test.tearDown();
-                }
-                break;
-            default:
-                textViewResults.append("Not implemented\n");
+        if (sqlite) {
+            tests.add(new GreendaoPerfTest());
         }
+        PerfTestRunner testRunner = new PerfTestRunner(this, this, textViewResults);
+        testRunner.run(type, tests);
     }
 
-    class TestType {
-        public static final String BULK_OPERATIONS = "Bulk operations (CRUD)";
-        public static final String BULK_OPERATIONS_INDEXED = "Bulk operations (CRUD) - indexed";
-        public static final String LOOK_UP_STRING_INDEX = "Look up string using index";
-
-        String name;
-
-        public TestType(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
+    @Override
+    public void done() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                buttonRun.setEnabled(true);
+            }
+        });
     }
 
 }

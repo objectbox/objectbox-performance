@@ -21,14 +21,22 @@ public class GreendaoPerfTest extends PerfTest {
     private DaoSession daoSession;
     private SimpleEntityNotNullDao dao;
 
-    public void setUp(Context context) {
-        super.setUp(context);
+    public void setUp(Context context, PerfTestRunner testRunner) {
+        super.setUp(context, testRunner);
         Database db = new DevOpenHelper(context, "sqlite-greendao").getWritableDb();
         daoSession = new DaoMaster(db).newSession();
         dao = daoSession.getSimpleEntityNotNullDao();
     }
 
     @Override
+    public void run(TestType type) {
+        switch (type.name) {
+            case TestType.BULK_OPERATIONS:
+                runBatchPerfTest();
+                break;
+        }
+    }
+
     public void runBatchPerfTest() {
         List<SimpleEntityNotNull> list = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
@@ -104,5 +112,10 @@ public class GreendaoPerfTest extends PerfTest {
     @Override
     public void tearDown() {
         daoSession.getDatabase().close();
+    }
+
+    @Override
+    public String name() {
+        return "greenDAO";
     }
 }
