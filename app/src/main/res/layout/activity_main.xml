@@ -109,7 +109,8 @@
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/buttonRunTest">
+        android:layout_below="@+id/buttonRunTest"
+        android:fadeScrollbars="false">
 
         <TextView
             android:id="@+id/textViewResults"
