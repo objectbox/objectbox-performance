@@ -21,7 +21,7 @@ import io.objectbox.performanceapp.PerfTestRunner.Callback;
 public class MainActivity extends Activity implements Callback {
     TestType[] TYPES = {
             new TestType(TestType.BULK_OPERATIONS, "bulk"),
-            new TestType(TestType.BULK_OPERATIONS_INDEXED, "bulk-index"),
+            new TestType(TestType.BULK_OPERATIONS_INDEXED, "bulk-indexed"),
             new TestType(TestType.LOOK_UP_STRING, "lookup-string"),
     };
     private TextView textViewResults;

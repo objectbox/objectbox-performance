@@ -1,6 +1,7 @@
 package io.objectbox.performanceapp;
 
 import android.content.Context;
+import android.database.Cursor;
 
 import org.greenrobot.greendao.database.Database;
 
@@ -20,12 +21,32 @@ import io.objectbox.performanceapp.greendao.SimpleEntityNotNullDao;
 public class GreendaoPerfTest extends PerfTest {
     private DaoSession daoSession;
     private SimpleEntityNotNullDao dao;
+    private boolean versionLoggedOnce;
+
+    @Override
+    public String name() {
+        return "greenDAO";
+    }
 
     public void setUp(Context context, PerfTestRunner testRunner) {
         super.setUp(context, testRunner);
         Database db = new DevOpenHelper(context, "sqlite-greendao").getWritableDb();
         daoSession = new DaoMaster(db).newSession();
         dao = daoSession.getSimpleEntityNotNullDao();
+
+        if (!versionLoggedOnce) {
+            Cursor cursor = db.rawQuery("select sqlite_version() AS sqlite_version", null);
+            if (cursor != null) {
+                try {
+                    if (cursor.moveToFirst()) {
+                        log("SQLite version " + cursor.getString(0));
+                    }
+                } finally {
+                    cursor.close();
+                }
+            }
+            versionLoggedOnce = true;
+        }
     }
 
     @Override
@@ -113,8 +134,4 @@ public class GreendaoPerfTest extends PerfTest {
         daoSession.getDatabase().close();
     }
 
-    @Override
-    public String name() {
-        return "greenDAO";
-    }
 }
