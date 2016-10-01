@@ -79,10 +79,22 @@ public class PerfTestRunner {
             @Override
             public void run() {
                 textViewResults.append(text.concat("\n"));
+                // post so just appended text is visible
                 if (scrollViewResults != null) {
-                    scrollViewResults.fullScroll(ScrollView.FOCUS_DOWN);
+                    textViewResults.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            scrollViewResults.fullScroll(ScrollView.FOCUS_DOWN);
+                        }
+                    });
                 }
-                joinLatch.countDown();
+                textViewResults.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        joinLatch.countDown();
+
+                    }
+                }, 20);
             }
         });
         try {
