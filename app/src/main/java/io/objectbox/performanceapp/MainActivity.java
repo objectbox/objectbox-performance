@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.Spinner;
 
 public class MainActivity extends Activity {
@@ -21,12 +22,19 @@ public class MainActivity extends Activity {
         findViewById(R.id.buttonRunTest).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                boolean objectBox = ((CheckBox) findViewById(R.id.checkBoxObjectBox)).isChecked();
+                boolean realm = ((CheckBox) findViewById(R.id.checkBoxRealm)).isChecked();
+                boolean sqlite = ((CheckBox) findViewById(R.id.checkBoxSQLite)).isChecked();
+                TestType type = (TestType) ((Spinner) findViewById(R.id.spinnerTestType)).getSelectedItem();
+                runTests(type, objectBox, realm, sqlite);
             }
         });
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, TYPES);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ((Spinner) findViewById(R.id.spinnerTestType)).setAdapter(adapter);
+    }
+
+    private void runTests(TestType type, boolean objectBox, boolean realm, boolean sqlite) {
     }
 
     class TestType {
