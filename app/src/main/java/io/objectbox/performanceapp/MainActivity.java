@@ -3,7 +3,6 @@ package io.objectbox.performanceapp;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
@@ -21,12 +20,13 @@ import io.objectbox.performanceapp.PerfTestRunner.Callback;
 
 public class MainActivity extends Activity implements Callback {
     TestType[] TYPES = {
-            new TestType(TestType.BULK_OPERATIONS),
-            new TestType(TestType.BULK_OPERATIONS_INDEXED),
-            new TestType(TestType.LOOK_UP_STRING_INDEX),
+            new TestType(TestType.BULK_OPERATIONS, "bulk"),
+            new TestType(TestType.BULK_OPERATIONS_INDEXED, "bulk-index"),
+            new TestType(TestType.LOOK_UP_STRING, "lookup-string"),
     };
     private TextView textViewResults;
     private Button buttonRun;
+    private PerfTestRunner testRunner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +64,15 @@ public class MainActivity extends Activity implements Callback {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ((Spinner) findViewById(R.id.spinnerTestType)).setAdapter(adapter);
         textViewResults = ((TextView) findViewById(R.id.textViewResults));
-        textViewResults.setMovementMethod(new ScrollingMovementMethod());
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (testRunner != null) {
+            testRunner.destroy();
+        }
+        testRunner = null;
+        super.onDestroy();
     }
 
     private void runTests(TestType type, int runs, int numberEntities, boolean objectBox, boolean realm, boolean sqlite) {
@@ -73,12 +81,13 @@ public class MainActivity extends Activity implements Callback {
         if (sqlite) {
             tests.add(new GreendaoPerfTest());
         }
-        PerfTestRunner testRunner = new PerfTestRunner(this, this, textViewResults, runs, numberEntities);
+        testRunner = new PerfTestRunner(this, this, textViewResults, runs, numberEntities);
         testRunner.run(type, tests);
     }
 
     @Override
     public void done() {
+        testRunner = null;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {

@@ -100,13 +100,21 @@
         android:layout_marginTop="16dp"
         android:text="Run Test(s)"/>
 
-    <TextView
-        android:id="@+id/textViewResults"
+    <!-- ScrollView allows nicer scrolling with fling vs. TextView only -->
+    <ScrollView
+        android:id="@+id/scrollViewResults"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/buttonRunTest"
-        android:gravity="bottom"
-        tools:text="Logging"
-        android:scrollbars="vertical"/>
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/buttonRunTest">
+
+        <TextView
+            android:id="@+id/textViewResults"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:text="Logging"/>
+    </ScrollView>
+
 
 </RelativeLayout>

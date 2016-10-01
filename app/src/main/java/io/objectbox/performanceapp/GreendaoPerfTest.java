@@ -42,7 +42,6 @@ public class GreendaoPerfTest extends PerfTest {
         for (int i = 0; i < numberEntities; i++) {
             list.add(createEntity((long) i));
         }
-        Benchmark benchmark = getBenchmark("greendao-batch");
         benchmark.start("insert");
         dao.insertInTx(list);
         log(benchmark.stop());

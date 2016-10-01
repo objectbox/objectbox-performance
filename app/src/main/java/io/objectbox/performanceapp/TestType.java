@@ -6,12 +6,14 @@ package io.objectbox.performanceapp;
 public class TestType {
     public static final String BULK_OPERATIONS = "Bulk operations (CRUD)";
     public static final String BULK_OPERATIONS_INDEXED = "Bulk operations (CRUD) - indexed";
-    public static final String LOOK_UP_STRING_INDEX = "Look up string using index";
+    public static final String LOOK_UP_STRING = "Look up string using index";
 
-    String name;
+    public final String name;
+    public final String nameShort;
 
-    public TestType(String name) {
+    public TestType(String name, String nameShort) {
         this.name = name;
+        this.nameShort = nameShort;
     }
 
     @Override

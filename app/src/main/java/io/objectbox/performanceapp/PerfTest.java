@@ -1,9 +1,7 @@
 package io.objectbox.performanceapp;
 
 import android.content.Context;
-import android.os.Environment;
 
-import java.io.File;
 import java.util.Random;
 
 /**
@@ -15,6 +13,7 @@ public abstract class PerfTest {
     protected Context context;
     protected PerfTestRunner testRunner;
     protected int numberEntities;
+    protected Benchmark benchmark;
 
     public void setUp(Context context, PerfTestRunner testRunner) {
         random = new Random();
@@ -23,22 +22,6 @@ public abstract class PerfTest {
     }
 
     public void tearDown() {
-    }
-
-    protected Benchmark getBenchmark(String name) {
-        return new Benchmark(getBenchFile(name));
-    }
-
-    protected File getBenchFile(String name) {
-        name += ".tsv";
-        File dir = Environment.getExternalStorageDirectory();
-        File file = new File(dir, name);
-        if (dir == null || !dir.canWrite()) {
-            File appFile = new File(context.getFilesDir(), name);
-            log("Using file " + appFile.getAbsolutePath() + ", (cannot write to " + file.getAbsolutePath() + ")");
-            file = appFile;
-        }
-        return file;
     }
 
     protected void log(String text) {
@@ -51,5 +34,9 @@ public abstract class PerfTest {
 
     public void setNumberEntities(int numberEntities) {
         this.numberEntities = numberEntities;
+    }
+
+    public void setBenchmark(Benchmark benchmark) {
+        this.benchmark = benchmark;
     }
 }

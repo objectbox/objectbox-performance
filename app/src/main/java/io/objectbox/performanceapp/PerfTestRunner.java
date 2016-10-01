@@ -1,9 +1,13 @@
 package io.objectbox.performanceapp;
 
 import android.app.Activity;
+import android.os.Environment;
 import android.util.Log;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
+import java.io.File;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -23,6 +27,7 @@ public class PerfTestRunner {
     private final TextView textViewResults;
     private final int runs;
     private final int numberEntities;
+    private ScrollView scrollViewResults;
 
     boolean running;
     boolean destroyed;
@@ -31,6 +36,9 @@ public class PerfTestRunner {
         this.activity = activity;
         this.callback = callback;
         this.textViewResults = textViewResults;
+        if (textViewResults.getParent() instanceof ScrollView) {
+            scrollViewResults = (ScrollView) textViewResults.getParent();
+        }
         this.runs = runs;
         this.numberEntities = numberEntities;
     }
@@ -70,6 +78,9 @@ public class PerfTestRunner {
             @Override
             public void run() {
                 textViewResults.append(text.concat("\n"));
+                if (scrollViewResults != null) {
+                    scrollViewResults.fullScroll(ScrollView.FOCUS_DOWN);
+                }
                 joinLatch.countDown();
             }
         });
@@ -87,12 +98,33 @@ public class PerfTestRunner {
 
     private void run(TestType type, PerfTest test) {
         test.setNumberEntities(numberEntities);
+        Benchmark benchmark = createBenchmark(type, test);
+        test.setBenchmark(benchmark);
+        log("Starting tests with " + numberEntities + " entities at " + new Date());
         for (int i = 1; i <= runs; i++) {
-            log("\nStarting " + test.name() + " " + type + " (" + i + "/" + runs + ")\n" +
+            log("\n" + test.name() + " " + type + " (" + i + "/" + runs + ")\n" +
                     "------------------------------");
             test.setUp(activity, this);
             test.run(type);
             test.tearDown();
+            benchmark.commit();
+            if (destroyed) {
+                break;
+            }
         }
+        log("\nTests done at " + new Date());
+    }
+
+    protected Benchmark createBenchmark(TestType type, PerfTest test) {
+        String name = test.name() + "-" + type.nameShort + ".tsv";
+        File dir = Environment.getExternalStorageDirectory();
+        File file = new File(dir, name);
+        if (dir == null || !dir.canWrite()) {
+            File appFile = new File(activity.getFilesDir(), name);
+            Log.i("PERF", "Using file " + appFile.getAbsolutePath() + " because " + file.getAbsolutePath() +
+                    " is not writable - please grant the storage permission to the app");
+            file = appFile;
+        }
+        return new Benchmark(file);
     }
 }
