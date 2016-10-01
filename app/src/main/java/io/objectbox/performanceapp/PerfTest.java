@@ -39,4 +39,14 @@ public abstract class PerfTest {
     public void setBenchmark(Benchmark benchmark) {
         this.benchmark = benchmark;
     }
+
+    protected void startBenchmark(String name) {
+        benchmark.start(name);
+    }
+
+
+    protected void stopBenchmark() {
+        log(benchmark.stop());
+    }
+
 }

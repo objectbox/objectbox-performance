@@ -58,7 +58,8 @@ public class PerfTestRunner {
                         }
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    log("Aborted because of " + e.getMessage());
+                    Log.e("PERF", "Error whil running tests", e);
                 } finally {
                     running = false;
                     callback.done();
@@ -105,8 +106,25 @@ public class PerfTestRunner {
             log("\n" + test.name() + " " + type + " (" + i + "/" + runs + ")\n" +
                     "------------------------------");
             test.setUp(activity, this);
-            test.run(type);
-            test.tearDown();
+
+            RuntimeException exDuringRun = null;
+            try {
+                test.run(type);
+            } catch (RuntimeException ex) {
+                exDuringRun = ex;
+            }
+
+            RuntimeException exDuringTearDown = null;
+            try {
+                test.tearDown();
+            } catch (RuntimeException ex) {
+                exDuringTearDown = ex;
+            }
+            if (exDuringRun != null) {
+                throw exDuringRun;
+            } else if (exDuringTearDown != null) {
+                throw exDuringTearDown;
+            }
             benchmark.commit();
             if (destroyed) {
                 break;
