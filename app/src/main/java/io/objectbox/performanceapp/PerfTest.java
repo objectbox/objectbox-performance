@@ -1,21 +1,39 @@
 package io.objectbox.performanceapp;
 
-import android.app.Application;
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.TextView;
 
+import java.io.Closeable;
 import java.io.File;
+import java.util.Random;
 
 /**
  * Created by Markus on 01.10.2016.
  */
 public abstract class PerfTest {
 
-    protected final Context context;
+    protected final int runs = 8;
+    protected int count = 10000;
+    protected final Random random;
 
-    PerfTest(Context context) {
+    protected Context context;
+    protected TextView textViewLogger;
+
+    PerfTest() {
+        random = new Random();
+    }
+
+    public void setUp(Context context) {
         this.context = context.getApplicationContext();
+    }
+
+    public void tearDown() {
+    }
+
+    public void setTextViewLogger(TextView textViewLogger) {
+        this.textViewLogger = textViewLogger;
     }
 
     protected Benchmark getBenchmark(String name) {
@@ -23,6 +41,7 @@ public abstract class PerfTest {
     }
 
     protected File getBenchFile(String name) {
+        name += ".tsv";
         File dir = Environment.getExternalStorageDirectory();
         File file = new File(dir, name);
         if (dir == null || !dir.canWrite()) {
@@ -35,6 +54,9 @@ public abstract class PerfTest {
 
     protected void log(String text) {
         Log.d("PERF", text);
+        if (textViewLogger != null) {
+            textViewLogger.append(text.concat("\n"));
+        }
     }
 
     public abstract void runBatchPerfTest();

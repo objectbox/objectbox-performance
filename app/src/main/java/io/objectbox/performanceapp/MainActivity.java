@@ -7,6 +7,10 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.Spinner;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends Activity {
     TestType[] TYPES = {
@@ -14,6 +18,7 @@ public class MainActivity extends Activity {
             new TestType(TestType.BULK_OPERATIONS_INDEXED),
             new TestType(TestType.LOOK_UP_STRING_INDEX),
     };
+    private TextView textViewResults;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +37,26 @@ public class MainActivity extends Activity {
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, TYPES);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ((Spinner) findViewById(R.id.spinnerTestType)).setAdapter(adapter);
+        textViewResults = ((TextView) findViewById(R.id.textViewResults));
     }
 
     private void runTests(TestType type, boolean objectBox, boolean realm, boolean sqlite) {
+        textViewResults.setText("");
+        List<PerfTest> tests = new ArrayList<>();
+        switch (type.name) {
+            case TestType.BULK_OPERATIONS:
+                if (sqlite) {
+                    GreendaoPerfTest test = new GreendaoPerfTest();
+                    tests.add(test);
+                    test.setTextViewLogger(textViewResults);
+                    test.setUp(this);
+                    test.runBatchPerfTest();
+                    test.tearDown();
+                }
+                break;
+            default:
+                textViewResults.append("Not implemented\n");
+        }
     }
 
     class TestType {
