@@ -59,7 +59,7 @@ public class PerfTestRunner {
                     }
                 } catch (Exception e) {
                     log("Aborted because of " + e.getMessage());
-                    Log.e("PERF", "Error whil running tests", e);
+                    Log.e("PERF", "Error while running tests", e);
                 } finally {
                     running = false;
                     callback.done();

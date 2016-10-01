@@ -18,6 +18,7 @@ import java.util.List;
 
 import io.objectbox.performanceapp.PerfTestRunner.Callback;
 import io.objectbox.performanceapp.greendao.GreendaoPerfTest;
+import io.objectbox.performanceapp.objectbox.ObjectBoxPerfTest;
 
 public class MainActivity extends Activity implements Callback {
     TestType[] TYPES = {
@@ -80,6 +81,9 @@ public class MainActivity extends Activity implements Callback {
     private void runTests(TestType type, int runs, int numberEntities, boolean objectBox, boolean realm, boolean sqlite) {
         textViewResults.setText("");
         List<PerfTest> tests = new ArrayList<>();
+        if (objectBox) {
+            tests.add(new ObjectBoxPerfTest());
+        }
         if (sqlite) {
             tests.add(new GreendaoPerfTest());
         }

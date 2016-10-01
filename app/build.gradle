@@ -11,11 +11,21 @@ buildscript {
     }
     dependencies {
         classpath "io.objectbox:objectbox-gradle-plugin:0.8.0-SNAPSHOT"
-        classpath 'org.greenrobot:greendao-gradle-plugin:3.2.0'
     }
 }
 
+apply plugin: 'io.objectbox'
 apply plugin: 'com.android.application'
+
+repositories {
+    maven {
+        credentials {
+            username internalObjectBoxRepoUser
+            password internalObjectBoxRepoPassword
+        }
+        url internalObjectBoxRepo
+    }
+}
 
 android {
     compileSdkVersion 24
@@ -33,10 +43,16 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        releaseDebugCert {
+            initWith release
+            // Just to use without checkjni
+            signingConfig signingConfigs.debug
+        }
     }
 }
 
 dependencies {
+    compile 'io.objectbox:objectbox-android:0.8.0-SNAPSHOT'
     compile 'org.greenrobot:greendao:3.2.0'
     compile 'org.greenrobot:essentials:3.0.0-RC1'
 }
