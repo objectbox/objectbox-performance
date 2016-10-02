@@ -59,4 +59,6 @@ public abstract class PerfTest {
         return bytes;
     }
 
+    public void allTestsComplete() {
+    }
 }

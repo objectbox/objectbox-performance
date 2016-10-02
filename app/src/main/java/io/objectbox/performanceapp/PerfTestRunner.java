@@ -144,6 +144,7 @@ public class PerfTestRunner {
                 break;
             }
         }
+        test.allTestsComplete();
         log("\nTests done at " + new Date());
     }
 

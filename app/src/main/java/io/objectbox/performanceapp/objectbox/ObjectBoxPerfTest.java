@@ -29,15 +29,11 @@ public class ObjectBoxPerfTest extends PerfTest {
     }
 
     public void setUp(Context context, PerfTestRunner testRunner) {
+        super.setUp(context, testRunner);
         store = MyObjectBox.builder().androidContext(context).build();
         store.close();
         store.deleteAllFiles();
         store = MyObjectBox.builder().androidContext(context).maxSizeInKByte(200 * 1024).build();
-        super.setUp(context, testRunner);
-        boolean deleted = context.deleteDatabase(DB_NAME);
-        if (deleted) {
-            log("DB existed before start - deleted");
-        }
         box = store.boxFor(SimpleEntity.class);
         boxIndexed = store.boxFor(SimpleEntityIndexed.class);
 
@@ -84,7 +80,7 @@ public class ObjectBoxPerfTest extends PerfTest {
         startBenchmark("update");
         box.put(list);
         stopBenchmark();
-        if(updateScalarsOnly) {
+        if (updateScalarsOnly) {
             return;
         }
 
