@@ -224,12 +224,14 @@ public class ObjectBoxPerfTest extends PerfTest {
         }
 
         startBenchmark("query");
+
+        final int propertyId = box.getPropertyId(SimpleEntityProperties.SimpleString.dbName);
         store.runInTx(new Runnable() {
             @Override
             public void run() {
                 long entitiesFound = 0;
                 for (int i = 0; i < numberEntities; i++) {
-                    List<SimpleEntity> entities = box.find(SimpleEntityProperties.SimpleString, stringsToLookup[i]);
+                    List<SimpleEntity> entities = box.find(propertyId, stringsToLookup[i]);
                     accessAll(entities);
                     entitiesFound += entities.size();
                 }
@@ -260,13 +262,14 @@ public class ObjectBoxPerfTest extends PerfTest {
 
         startBenchmark("query");
         final long[] entitiesFoundHolder = {0};
+        final int propertyId = boxIndexed.getPropertyId(SimpleEntityIndexedProperties.SimpleString.dbName);
         store.runInTx(new Runnable() {
             @Override
             public void run() {
                 long entitiesFound = 0;
                 for (int i = 0; i < numberEntities; i++) {
                     List<SimpleEntityIndexed> entities =
-                            boxIndexed.find(SimpleEntityIndexedProperties.SimpleString, stringsToLookup[i]);
+                            boxIndexed.find(propertyId, stringsToLookup[i]);
                     accessAllIndexed(entities);
                     entitiesFound += entities.size();
                 }
