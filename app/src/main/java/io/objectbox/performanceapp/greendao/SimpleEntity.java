@@ -11,14 +11,14 @@ import org.greenrobot.greendao.annotation.*;
 public class SimpleEntity {
 
     @Id
-    private Long id;
-    private Boolean simpleBoolean;
-    private Byte simpleByte;
-    private Short simpleShort;
-    private Integer simpleInt;
-    private Long simpleLong;
-    private Float simpleFloat;
-    private Double simpleDouble;
+    private long id;
+    private boolean simpleBoolean;
+    private byte simpleByte;
+    private short simpleShort;
+    private int simpleInt;
+    private long simpleLong;
+    private float simpleFloat;
+    private double simpleDouble;
     private String simpleString;
     private byte[] simpleByteArray;
 
@@ -26,12 +26,12 @@ public class SimpleEntity {
     public SimpleEntity() {
     }
 
-    public SimpleEntity(Long id) {
+    public SimpleEntity(long id) {
         this.id = id;
     }
 
     @Generated
-    public SimpleEntity(Long id, Boolean simpleBoolean, Byte simpleByte, Short simpleShort, Integer simpleInt, Long simpleLong, Float simpleFloat, Double simpleDouble, String simpleString, byte[] simpleByteArray) {
+    public SimpleEntity(long id, boolean simpleBoolean, byte simpleByte, short simpleShort, int simpleInt, long simpleLong, float simpleFloat, double simpleDouble, String simpleString, byte[] simpleByteArray) {
         this.id = id;
         this.simpleBoolean = simpleBoolean;
         this.simpleByte = simpleByte;
@@ -44,67 +44,67 @@ public class SimpleEntity {
         this.simpleByteArray = simpleByteArray;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public Boolean getSimpleBoolean() {
+    public boolean getSimpleBoolean() {
         return simpleBoolean;
     }
 
-    public void setSimpleBoolean(Boolean simpleBoolean) {
+    public void setSimpleBoolean(boolean simpleBoolean) {
         this.simpleBoolean = simpleBoolean;
     }
 
-    public Byte getSimpleByte() {
+    public byte getSimpleByte() {
         return simpleByte;
     }
 
-    public void setSimpleByte(Byte simpleByte) {
+    public void setSimpleByte(byte simpleByte) {
         this.simpleByte = simpleByte;
     }
 
-    public Short getSimpleShort() {
+    public short getSimpleShort() {
         return simpleShort;
     }
 
-    public void setSimpleShort(Short simpleShort) {
+    public void setSimpleShort(short simpleShort) {
         this.simpleShort = simpleShort;
     }
 
-    public Integer getSimpleInt() {
+    public int getSimpleInt() {
         return simpleInt;
     }
 
-    public void setSimpleInt(Integer simpleInt) {
+    public void setSimpleInt(int simpleInt) {
         this.simpleInt = simpleInt;
     }
 
-    public Long getSimpleLong() {
+    public long getSimpleLong() {
         return simpleLong;
     }
 
-    public void setSimpleLong(Long simpleLong) {
+    public void setSimpleLong(long simpleLong) {
         this.simpleLong = simpleLong;
     }
 
-    public Float getSimpleFloat() {
+    public float getSimpleFloat() {
         return simpleFloat;
     }
 
-    public void setSimpleFloat(Float simpleFloat) {
+    public void setSimpleFloat(float simpleFloat) {
         this.simpleFloat = simpleFloat;
     }
 
-    public Double getSimpleDouble() {
+    public double getSimpleDouble() {
         return simpleDouble;
     }
 
-    public void setSimpleDouble(Double simpleDouble) {
+    public void setSimpleDouble(double simpleDouble) {
         this.simpleDouble = simpleDouble;
     }
 

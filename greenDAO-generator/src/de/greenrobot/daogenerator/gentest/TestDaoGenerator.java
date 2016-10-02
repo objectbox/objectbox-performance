@@ -38,9 +38,8 @@ public class TestDaoGenerator {
 
     public TestDaoGenerator() {
         schema = new Schema(1, "io.objectbox.performanceapp.greendao");
-        createSimple();
-        createSimpleNotNull("SimpleEntityNotNull", false);
-        createSimpleNotNull("SimpleEntityNotNullIndexed", true);
+        createSimple("SimpleEntity", false);
+        createSimple("SimpleEntityIndexed", true);
     }
 
     public void generate() throws Exception {
@@ -49,26 +48,7 @@ public class TestDaoGenerator {
         daoGenerator.generateAll(schema, src);
     }
 
-    protected void createSimple() {
-        Entity simple = schema.addEntity("SimpleEntity");
-        addSimpleProperties(simple);
-    }
-
-    private PropertyBuilder addSimpleProperties(Entity entity) {
-        entity.addIdProperty();
-        entity.addBooleanProperty("simpleBoolean");
-        entity.addByteProperty("simpleByte");
-        entity.addShortProperty("simpleShort");
-        entity.addIntProperty("simpleInt");
-        entity.addLongProperty("simpleLong");
-        entity.addFloatProperty("simpleFloat");
-        entity.addDoubleProperty("simpleDouble");
-        PropertyBuilder simpleString = entity.addStringProperty("simpleString");
-        entity.addByteArrayProperty("simpleByteArray");
-        return simpleString;
-    }
-
-    protected void createSimpleNotNull(String name, boolean indexed) {
+    protected void createSimple(String name, boolean indexed) {
         Entity notNull = schema.addEntity(name);
         notNull.addIdProperty().notNull();
         notNull.addBooleanProperty("simpleBoolean").notNull();

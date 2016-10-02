@@ -22,14 +22,14 @@ public class SimpleEntityDao extends AbstractDao<SimpleEntity, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property SimpleBoolean = new Property(1, Boolean.class, "simpleBoolean", false, "SIMPLE_BOOLEAN");
-        public final static Property SimpleByte = new Property(2, Byte.class, "simpleByte", false, "SIMPLE_BYTE");
-        public final static Property SimpleShort = new Property(3, Short.class, "simpleShort", false, "SIMPLE_SHORT");
-        public final static Property SimpleInt = new Property(4, Integer.class, "simpleInt", false, "SIMPLE_INT");
-        public final static Property SimpleLong = new Property(5, Long.class, "simpleLong", false, "SIMPLE_LONG");
-        public final static Property SimpleFloat = new Property(6, Float.class, "simpleFloat", false, "SIMPLE_FLOAT");
-        public final static Property SimpleDouble = new Property(7, Double.class, "simpleDouble", false, "SIMPLE_DOUBLE");
+        public final static Property Id = new Property(0, long.class, "id", true, "_id");
+        public final static Property SimpleBoolean = new Property(1, boolean.class, "simpleBoolean", false, "SIMPLE_BOOLEAN");
+        public final static Property SimpleByte = new Property(2, byte.class, "simpleByte", false, "SIMPLE_BYTE");
+        public final static Property SimpleShort = new Property(3, short.class, "simpleShort", false, "SIMPLE_SHORT");
+        public final static Property SimpleInt = new Property(4, int.class, "simpleInt", false, "SIMPLE_INT");
+        public final static Property SimpleLong = new Property(5, long.class, "simpleLong", false, "SIMPLE_LONG");
+        public final static Property SimpleFloat = new Property(6, float.class, "simpleFloat", false, "SIMPLE_FLOAT");
+        public final static Property SimpleDouble = new Property(7, double.class, "simpleDouble", false, "SIMPLE_DOUBLE");
         public final static Property SimpleString = new Property(8, String.class, "simpleString", false, "SIMPLE_STRING");
         public final static Property SimpleByteArray = new Property(9, byte[].class, "simpleByteArray", false, "SIMPLE_BYTE_ARRAY");
     }
@@ -47,14 +47,14 @@ public class SimpleEntityDao extends AbstractDao<SimpleEntity, Long> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"SIMPLE_ENTITY\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
-                "\"SIMPLE_BOOLEAN\" INTEGER," + // 1: simpleBoolean
-                "\"SIMPLE_BYTE\" INTEGER," + // 2: simpleByte
-                "\"SIMPLE_SHORT\" INTEGER," + // 3: simpleShort
-                "\"SIMPLE_INT\" INTEGER," + // 4: simpleInt
-                "\"SIMPLE_LONG\" INTEGER," + // 5: simpleLong
-                "\"SIMPLE_FLOAT\" REAL," + // 6: simpleFloat
-                "\"SIMPLE_DOUBLE\" REAL," + // 7: simpleDouble
+                "\"_id\" INTEGER PRIMARY KEY NOT NULL ," + // 0: id
+                "\"SIMPLE_BOOLEAN\" INTEGER NOT NULL ," + // 1: simpleBoolean
+                "\"SIMPLE_BYTE\" INTEGER NOT NULL ," + // 2: simpleByte
+                "\"SIMPLE_SHORT\" INTEGER NOT NULL ," + // 3: simpleShort
+                "\"SIMPLE_INT\" INTEGER NOT NULL ," + // 4: simpleInt
+                "\"SIMPLE_LONG\" INTEGER NOT NULL ," + // 5: simpleLong
+                "\"SIMPLE_FLOAT\" REAL NOT NULL ," + // 6: simpleFloat
+                "\"SIMPLE_DOUBLE\" REAL NOT NULL ," + // 7: simpleDouble
                 "\"SIMPLE_STRING\" TEXT," + // 8: simpleString
                 "\"SIMPLE_BYTE_ARRAY\" BLOB);"); // 9: simpleByteArray
     }
@@ -68,46 +68,14 @@ public class SimpleEntityDao extends AbstractDao<SimpleEntity, Long> {
     @Override
     protected final void bindValues(DatabaseStatement stmt, SimpleEntity entity) {
         stmt.clearBindings();
- 
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
-        }
- 
-        Boolean simpleBoolean = entity.getSimpleBoolean();
-        if (simpleBoolean != null) {
-            stmt.bindLong(2, simpleBoolean ? 1L: 0L);
-        }
- 
-        Byte simpleByte = entity.getSimpleByte();
-        if (simpleByte != null) {
-            stmt.bindLong(3, simpleByte);
-        }
- 
-        Short simpleShort = entity.getSimpleShort();
-        if (simpleShort != null) {
-            stmt.bindLong(4, simpleShort);
-        }
- 
-        Integer simpleInt = entity.getSimpleInt();
-        if (simpleInt != null) {
-            stmt.bindLong(5, simpleInt);
-        }
- 
-        Long simpleLong = entity.getSimpleLong();
-        if (simpleLong != null) {
-            stmt.bindLong(6, simpleLong);
-        }
- 
-        Float simpleFloat = entity.getSimpleFloat();
-        if (simpleFloat != null) {
-            stmt.bindDouble(7, simpleFloat);
-        }
- 
-        Double simpleDouble = entity.getSimpleDouble();
-        if (simpleDouble != null) {
-            stmt.bindDouble(8, simpleDouble);
-        }
+        stmt.bindLong(1, entity.getId());
+        stmt.bindLong(2, entity.getSimpleBoolean() ? 1L: 0L);
+        stmt.bindLong(3, entity.getSimpleByte());
+        stmt.bindLong(4, entity.getSimpleShort());
+        stmt.bindLong(5, entity.getSimpleInt());
+        stmt.bindLong(6, entity.getSimpleLong());
+        stmt.bindDouble(7, entity.getSimpleFloat());
+        stmt.bindDouble(8, entity.getSimpleDouble());
  
         String simpleString = entity.getSimpleString();
         if (simpleString != null) {
@@ -123,46 +91,14 @@ public class SimpleEntityDao extends AbstractDao<SimpleEntity, Long> {
     @Override
     protected final void bindValues(SQLiteStatement stmt, SimpleEntity entity) {
         stmt.clearBindings();
- 
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
-        }
- 
-        Boolean simpleBoolean = entity.getSimpleBoolean();
-        if (simpleBoolean != null) {
-            stmt.bindLong(2, simpleBoolean ? 1L: 0L);
-        }
- 
-        Byte simpleByte = entity.getSimpleByte();
-        if (simpleByte != null) {
-            stmt.bindLong(3, simpleByte);
-        }
- 
-        Short simpleShort = entity.getSimpleShort();
-        if (simpleShort != null) {
-            stmt.bindLong(4, simpleShort);
-        }
- 
-        Integer simpleInt = entity.getSimpleInt();
-        if (simpleInt != null) {
-            stmt.bindLong(5, simpleInt);
-        }
- 
-        Long simpleLong = entity.getSimpleLong();
-        if (simpleLong != null) {
-            stmt.bindLong(6, simpleLong);
-        }
- 
-        Float simpleFloat = entity.getSimpleFloat();
-        if (simpleFloat != null) {
-            stmt.bindDouble(7, simpleFloat);
-        }
- 
-        Double simpleDouble = entity.getSimpleDouble();
-        if (simpleDouble != null) {
-            stmt.bindDouble(8, simpleDouble);
-        }
+        stmt.bindLong(1, entity.getId());
+        stmt.bindLong(2, entity.getSimpleBoolean() ? 1L: 0L);
+        stmt.bindLong(3, entity.getSimpleByte());
+        stmt.bindLong(4, entity.getSimpleShort());
+        stmt.bindLong(5, entity.getSimpleInt());
+        stmt.bindLong(6, entity.getSimpleLong());
+        stmt.bindDouble(7, entity.getSimpleFloat());
+        stmt.bindDouble(8, entity.getSimpleDouble());
  
         String simpleString = entity.getSimpleString();
         if (simpleString != null) {
@@ -177,20 +113,20 @@ public class SimpleEntityDao extends AbstractDao<SimpleEntity, Long> {
 
     @Override
     public Long readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
+        return cursor.getLong(offset + 0);
     }    
 
     @Override
     public SimpleEntity readEntity(Cursor cursor, int offset) {
         SimpleEntity entity = new SimpleEntity( //
-            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getShort(offset + 1) != 0, // simpleBoolean
-            cursor.isNull(offset + 2) ? null : (byte) cursor.getShort(offset + 2), // simpleByte
-            cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3), // simpleShort
-            cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // simpleInt
-            cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5), // simpleLong
-            cursor.isNull(offset + 6) ? null : cursor.getFloat(offset + 6), // simpleFloat
-            cursor.isNull(offset + 7) ? null : cursor.getDouble(offset + 7), // simpleDouble
+            cursor.getLong(offset + 0), // id
+            cursor.getShort(offset + 1) != 0, // simpleBoolean
+            (byte) cursor.getShort(offset + 2), // simpleByte
+            cursor.getShort(offset + 3), // simpleShort
+            cursor.getInt(offset + 4), // simpleInt
+            cursor.getLong(offset + 5), // simpleLong
+            cursor.getFloat(offset + 6), // simpleFloat
+            cursor.getDouble(offset + 7), // simpleDouble
             cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // simpleString
             cursor.isNull(offset + 9) ? null : cursor.getBlob(offset + 9) // simpleByteArray
         );
@@ -199,14 +135,14 @@ public class SimpleEntityDao extends AbstractDao<SimpleEntity, Long> {
      
     @Override
     public void readEntity(Cursor cursor, SimpleEntity entity, int offset) {
-        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setSimpleBoolean(cursor.isNull(offset + 1) ? null : cursor.getShort(offset + 1) != 0);
-        entity.setSimpleByte(cursor.isNull(offset + 2) ? null : (byte) cursor.getShort(offset + 2));
-        entity.setSimpleShort(cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3));
-        entity.setSimpleInt(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
-        entity.setSimpleLong(cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5));
-        entity.setSimpleFloat(cursor.isNull(offset + 6) ? null : cursor.getFloat(offset + 6));
-        entity.setSimpleDouble(cursor.isNull(offset + 7) ? null : cursor.getDouble(offset + 7));
+        entity.setId(cursor.getLong(offset + 0));
+        entity.setSimpleBoolean(cursor.getShort(offset + 1) != 0);
+        entity.setSimpleByte((byte) cursor.getShort(offset + 2));
+        entity.setSimpleShort(cursor.getShort(offset + 3));
+        entity.setSimpleInt(cursor.getInt(offset + 4));
+        entity.setSimpleLong(cursor.getLong(offset + 5));
+        entity.setSimpleFloat(cursor.getFloat(offset + 6));
+        entity.setSimpleDouble(cursor.getDouble(offset + 7));
         entity.setSimpleString(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
         entity.setSimpleByteArray(cursor.isNull(offset + 9) ? null : cursor.getBlob(offset + 9));
      }
@@ -228,7 +164,7 @@ public class SimpleEntityDao extends AbstractDao<SimpleEntity, Long> {
 
     @Override
     public boolean hasKey(SimpleEntity entity) {
-        return entity.getId() != null;
+        throw new UnsupportedOperationException("Unsupported for entities with a non-null key");
     }
 
     @Override

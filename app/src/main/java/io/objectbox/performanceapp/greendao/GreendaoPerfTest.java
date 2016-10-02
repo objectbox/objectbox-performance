@@ -14,7 +14,7 @@ import io.objectbox.performanceapp.PerfTest;
 import io.objectbox.performanceapp.PerfTestRunner;
 import io.objectbox.performanceapp.TestType;
 import io.objectbox.performanceapp.greendao.DaoMaster.DevOpenHelper;
-import io.objectbox.performanceapp.greendao.SimpleEntityNotNullIndexedDao.Properties;
+import io.objectbox.performanceapp.greendao.SimpleEntityIndexedDao.Properties;
 
 /**
  * Created by Markus on 01.10.2016.
@@ -24,10 +24,10 @@ public class GreendaoPerfTest extends PerfTest {
     public static final String DB_NAME = "sqlite-greendao";
     private Database db;
     private DaoSession daoSession;
-    private SimpleEntityNotNullDao dao;
+    private SimpleEntityDao dao;
 
     private boolean versionLoggedOnce;
-    private SimpleEntityNotNullIndexedDao daoIndexed;
+    private SimpleEntityIndexedDao daoIndexed;
 
     @Override
     public String name() {
@@ -42,8 +42,8 @@ public class GreendaoPerfTest extends PerfTest {
         }
         db = new DevOpenHelper(context, DB_NAME).getWritableDb();
         daoSession = new DaoMaster(db).newSession(IdentityScopeType.None);
-        dao = daoSession.getSimpleEntityNotNullDao();
-        daoIndexed = daoSession.getSimpleEntityNotNullIndexedDao();
+        dao = daoSession.getSimpleEntityDao();
+        daoIndexed = daoSession.getSimpleEntityIndexedDao();
 
         if (!versionLoggedOnce) {
             Cursor cursor = db.rawQuery("select sqlite_version() AS sqlite_version", null);
@@ -79,7 +79,7 @@ public class GreendaoPerfTest extends PerfTest {
     }
 
     public void runBatchPerfTest(boolean scalarsOnly) {
-        List<SimpleEntityNotNull> list = new ArrayList<>(numberEntities);
+        List<SimpleEntity> list = new ArrayList<>(numberEntities);
         for (int i = 0; i < numberEntities; i++) {
             list.add(createEntity((long) i, scalarsOnly));
         }
@@ -87,7 +87,7 @@ public class GreendaoPerfTest extends PerfTest {
         dao.insertInTx(list);
         stopBenchmark();
 
-        for (SimpleEntityNotNull entity : list) {
+        for (SimpleEntity entity : list) {
             if (scalarsOnly) {
                 setRandomScalars(entity);
             } else {
@@ -99,7 +99,7 @@ public class GreendaoPerfTest extends PerfTest {
         stopBenchmark();
 
         startBenchmark("load");
-        List<SimpleEntityNotNull> reloaded = dao.loadAll();
+        List<SimpleEntity> reloaded = dao.loadAll();
         stopBenchmark();
 
         startBenchmark("access");
@@ -111,13 +111,13 @@ public class GreendaoPerfTest extends PerfTest {
         stopBenchmark();
     }
 
-    protected void setRandomValues(SimpleEntityNotNull entity) {
+    protected void setRandomValues(SimpleEntity entity) {
         setRandomScalars(entity);
         entity.setSimpleString(randomString());
         entity.setSimpleByteArray(randomBytes());
     }
 
-    private void setRandomScalars(SimpleEntityNotNull entity) {
+    private void setRandomScalars(SimpleEntity entity) {
         entity.setSimpleBoolean(random.nextBoolean());
         entity.setSimpleByte((byte) random.nextInt());
         entity.setSimpleShort((short) random.nextInt());
@@ -127,8 +127,8 @@ public class GreendaoPerfTest extends PerfTest {
         entity.setSimpleFloat(random.nextFloat());
     }
 
-    public SimpleEntityNotNull createEntity(Long key, boolean scalarsOnly) {
-        SimpleEntityNotNull entity = new SimpleEntityNotNull();
+    public SimpleEntity createEntity(Long key, boolean scalarsOnly) {
+        SimpleEntity entity = new SimpleEntity();
         if (key != null) {
             entity.setId(key);
         }
@@ -140,8 +140,8 @@ public class GreendaoPerfTest extends PerfTest {
         return entity;
     }
 
-    protected void accessAll(List<SimpleEntityNotNull> list) {
-        for (SimpleEntityNotNull entity : list) {
+    protected void accessAll(List<SimpleEntity> list) {
+        for (SimpleEntity entity : list) {
             entity.getId();
             entity.getSimpleBoolean();
             entity.getSimpleByte();
@@ -156,7 +156,7 @@ public class GreendaoPerfTest extends PerfTest {
     }
 
     public void runBatchPerfTestIndexed() {
-        List<SimpleEntityNotNullIndexed> list = new ArrayList<>(numberEntities);
+        List<SimpleEntityIndexed> list = new ArrayList<>(numberEntities);
         for (int i = 0; i < numberEntities; i++) {
             list.add(createEntityIndexed((long) i));
         }
@@ -164,7 +164,7 @@ public class GreendaoPerfTest extends PerfTest {
         daoIndexed.insertInTx(list);
         stopBenchmark();
 
-        for (SimpleEntityNotNullIndexed entity : list) {
+        for (SimpleEntityIndexed entity : list) {
             setRandomValues(entity);
         }
         startBenchmark("update");
@@ -172,7 +172,7 @@ public class GreendaoPerfTest extends PerfTest {
         stopBenchmark();
 
         startBenchmark("load");
-        List<SimpleEntityNotNullIndexed> reloaded = daoIndexed.loadAll();
+        List<SimpleEntityIndexed> reloaded = daoIndexed.loadAll();
         stopBenchmark();
 
         startBenchmark("access");
@@ -184,7 +184,7 @@ public class GreendaoPerfTest extends PerfTest {
         stopBenchmark();
     }
 
-    protected void setRandomValues(SimpleEntityNotNullIndexed entity) {
+    protected void setRandomValues(SimpleEntityIndexed entity) {
         entity.setSimpleBoolean(random.nextBoolean());
         entity.setSimpleByte((byte) random.nextInt());
         entity.setSimpleShort((short) random.nextInt());
@@ -196,8 +196,8 @@ public class GreendaoPerfTest extends PerfTest {
         entity.setSimpleByteArray(randomBytes());
     }
 
-    public SimpleEntityNotNullIndexed createEntityIndexed(Long key) {
-        SimpleEntityNotNullIndexed entity = new SimpleEntityNotNullIndexed();
+    public SimpleEntityIndexed createEntityIndexed(Long key) {
+        SimpleEntityIndexed entity = new SimpleEntityIndexed();
         if (key != null) {
             entity.setId(key);
         }
@@ -205,8 +205,8 @@ public class GreendaoPerfTest extends PerfTest {
         return entity;
     }
 
-    protected void accessAllIndexed(List<SimpleEntityNotNullIndexed> list) {
-        for (SimpleEntityNotNullIndexed entity : list) {
+    protected void accessAllIndexed(List<SimpleEntityIndexed> list) {
+        for (SimpleEntityIndexed entity : list) {
             entity.getId();
             entity.getSimpleBoolean();
             entity.getSimpleByte();
@@ -221,7 +221,7 @@ public class GreendaoPerfTest extends PerfTest {
     }
 
     private void runLookupString() {
-        List<SimpleEntityNotNullIndexed> entities = new ArrayList<>(numberEntities);
+        List<SimpleEntityIndexed> entities = new ArrayList<>(numberEntities);
         for (int i = 0; i < numberEntities; i++) {
             entities.add(createEntityIndexed((long) i));
         }
@@ -240,11 +240,11 @@ public class GreendaoPerfTest extends PerfTest {
         }
 
         startBenchmark("lookup-indexed");
-        Query<SimpleEntityNotNullIndexed> query = daoIndexed.queryBuilder().where(Properties.SimpleString.eq(null)).build();
+        Query<SimpleEntityIndexed> query = daoIndexed.queryBuilder().where(Properties.SimpleString.eq(null)).build();
         db.beginTransaction();
         for (int i = 0; i < numberEntities; i++) {
             query.setParameter(0, stringsToLookup[i]);
-            List<SimpleEntityNotNullIndexed> result = query.list();
+            List<SimpleEntityIndexed> result = query.list();
         }
         db.endTransaction();
         stopBenchmark();
