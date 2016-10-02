@@ -36,7 +36,7 @@ public class RandomValues {
     }
 
     public static String createRandomString(Random random, int minLength, int maxLength) {
-        int length = MIN_LENGTH + random.nextInt(MAX_LENGTH - MIN_LENGTH);
+        int length = minLength + random.nextInt(maxLength - minLength);
         return createRandomString(random, length);
     }
 

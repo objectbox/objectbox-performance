@@ -74,7 +74,7 @@
         android:layout_below="@+id/textViewRuns"
         android:ems="10"
         android:inputType="number"
-        android:text="8"/>
+        android:text="1"/>
 
 
     <EditText

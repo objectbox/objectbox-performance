@@ -48,7 +48,7 @@ public class PerfTestRunner {
             throw new IllegalStateException("Already running");
         }
         running = true;
-        new Thread(new Runnable() {
+        Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -65,7 +65,9 @@ public class PerfTestRunner {
                     callback.done();
                 }
             }
-        }).start();
+        });
+        thread.setPriority(Thread.MAX_PRIORITY);
+        thread.start();
     }
 
     public void destroy() {

@@ -32,7 +32,7 @@ public class ObjectBoxPerfTest extends PerfTest {
         store = MyObjectBox.builder().androidContext(context).build();
         store.close();
         store.deleteAllFiles();
-        store = MyObjectBox.builder().androidContext(context).maxSizeInKByte(1024 * 1024).build();
+        store = MyObjectBox.builder().androidContext(context).maxSizeInKByte(200 * 1024).build();
         super.setUp(context, testRunner);
         boolean deleted = context.deleteDatabase(DB_NAME);
         if (deleted) {
@@ -100,7 +100,7 @@ public class ObjectBoxPerfTest extends PerfTest {
         entity.setSimpleDouble(random.nextDouble());
         entity.setSimpleFloat(random.nextFloat());
         entity.setSimpleString(randomString());
-        entity.setSimpleByteArray(randomBytes());
+        //entity.setSimpleByteArray(randomBytes());
     }
 
     public SimpleEntity createEntity() {
@@ -198,7 +198,11 @@ public class ObjectBoxPerfTest extends PerfTest {
 
         final String[] stringsToLookup = new String[numberEntities];
         for (int i = 0; i < numberEntities; i++) {
-            stringsToLookup[i] = entities.get(random.nextInt(numberEntities)).getSimpleString();
+            String text = "";
+            while (text.length() < 2) {
+                text = entities.get(random.nextInt(numberEntities)).getSimpleString();
+            }
+            stringsToLookup[i] = text;
         }
 
         startBenchmark("lookup-indexed");

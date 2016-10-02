@@ -49,11 +49,11 @@ public abstract class PerfTest {
     }
 
     public String randomString() {
-        return RandomValues.createRandomString(random, 0, 200);
+        return RandomValues.createRandomString(random, 0, 100);
     }
 
     public byte[] randomBytes() {
-        int length = random.nextInt(200);
+        int length = random.nextInt(100);
         byte[] bytes = new byte[length];
         random.nextBytes(bytes);
         return bytes;

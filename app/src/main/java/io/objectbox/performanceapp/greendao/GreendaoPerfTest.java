@@ -217,7 +217,11 @@ public class GreendaoPerfTest extends PerfTest {
 
         String[] stringsToLookup = new String[numberEntities];
         for (int i = 0; i < numberEntities; i++) {
-            stringsToLookup[i] = entities.get(random.nextInt(numberEntities)).getSimpleString();
+            String text = "";
+            while (text.length() < 2) {
+                text = entities.get(random.nextInt(numberEntities)).getSimpleString();
+            }
+            stringsToLookup[i] = text;
         }
 
         startBenchmark("lookup-indexed");
@@ -225,8 +229,7 @@ public class GreendaoPerfTest extends PerfTest {
         db.beginTransaction();
         for (int i = 0; i < numberEntities; i++) {
             query.setParameter(0, stringsToLookup[i]);
-            SimpleEntityNotNullIndexed entity = query.unique();
-            // assertEquals(stringsToLookup[i], entity.getSimpleString());
+            List<SimpleEntityNotNullIndexed> result = query.list();
         }
         db.endTransaction();
         stopBenchmark();
