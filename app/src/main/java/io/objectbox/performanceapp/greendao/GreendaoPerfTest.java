@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 
 import org.greenrobot.greendao.database.Database;
+import org.greenrobot.greendao.identityscope.IdentityScopeType;
 import org.greenrobot.greendao.query.Query;
 
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ public class GreendaoPerfTest extends PerfTest {
             log("DB existed before start - deleted");
         }
         db = new DevOpenHelper(context, DB_NAME).getWritableDb();
-        daoSession = new DaoMaster(db).newSession();
+        daoSession = new DaoMaster(db).newSession(IdentityScopeType.None);
         dao = daoSession.getSimpleEntityNotNullDao();
         daoIndexed = daoSession.getSimpleEntityNotNullIndexedDao();
 
