@@ -16,7 +16,6 @@ import io.objectbox.performanceapp.TestType;
  */
 
 public class ObjectBoxPerfTest extends PerfTest {
-    public static final String DB_NAME = "sqlite-greendao";
     private BoxStore store;
 
     private boolean versionLoggedOnce;
@@ -38,7 +37,13 @@ public class ObjectBoxPerfTest extends PerfTest {
         boxIndexed = store.boxFor(SimpleEntityIndexed.class);
 
         if (!versionLoggedOnce) {
-            //log("ObjectBox " + ???);
+            String versionNative = BoxStore.getVersionNative();
+            String versionJava = BoxStore.getVersion();
+            if (versionJava != null && versionJava.equals(versionJava)) {
+                log("ObjectBox " + versionNative);
+            } else {
+                log("ObjectBox " + versionNative + " (Java: " + versionJava + ")");
+            }
             versionLoggedOnce = true;
         }
     }
@@ -226,19 +231,14 @@ public class ObjectBoxPerfTest extends PerfTest {
         startBenchmark("query");
 
         final int propertyId = box.getPropertyId(SimpleEntityProperties.SimpleString.dbName);
-        store.runInTx(new Runnable() {
-            @Override
-            public void run() {
-                long entitiesFound = 0;
-                for (int i = 0; i < numberEntities; i++) {
-                    List<SimpleEntity> entities = box.find(propertyId, stringsToLookup[i]);
-                    accessAll(entities);
-                    entitiesFound += entities.size();
-                }
-                log("Entities found: " + entitiesFound);
-            }
-        });
+        long entitiesFound = 0;
+        for (int i = 0; i < numberEntities; i++) {
+            List<SimpleEntity> result = box.find(propertyId, stringsToLookup[i]);
+            accessAll(result);
+            entitiesFound += result.size();
+        }
         stopBenchmark();
+        log("Entities found: " + entitiesFound);
     }
 
     private void runQueryByStringIndexed() {
@@ -261,23 +261,15 @@ public class ObjectBoxPerfTest extends PerfTest {
         }
 
         startBenchmark("query");
-        final long[] entitiesFoundHolder = {0};
         final int propertyId = boxIndexed.getPropertyId(SimpleEntityIndexedProperties.SimpleString.dbName);
-        store.runInTx(new Runnable() {
-            @Override
-            public void run() {
-                long entitiesFound = 0;
-                for (int i = 0; i < numberEntities; i++) {
-                    List<SimpleEntityIndexed> entities =
-                            boxIndexed.find(propertyId, stringsToLookup[i]);
-                    accessAllIndexed(entities);
-                    entitiesFound += entities.size();
-                }
-                entitiesFoundHolder[0] = entitiesFound;
-            }
-        });
+        long entitiesFound = 0;
+        for (int i = 0; i < numberEntities; i++) {
+            List<SimpleEntityIndexed> result = boxIndexed.find(propertyId, stringsToLookup[i]);
+            accessAllIndexed(result);
+            entitiesFound += result.size();
+        }
         stopBenchmark();
-        log("Entities found: " + entitiesFoundHolder[0]);
+        log("Entities found: " + entitiesFound);
     }
 
     @Override
