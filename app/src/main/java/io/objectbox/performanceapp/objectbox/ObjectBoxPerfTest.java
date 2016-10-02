@@ -49,7 +49,7 @@ public class ObjectBoxPerfTest extends PerfTest {
             case TestType.CRUD:
                 runBatchPerfTest(false);
                 break;
-            case TestType.UPDATE_SCALARS:
+            case TestType.CRUD_SCALARS:
                 runBatchPerfTest(true);
                 break;
             case TestType.CRUD_INDEXED:
@@ -61,17 +61,17 @@ public class ObjectBoxPerfTest extends PerfTest {
         }
     }
 
-    public void runBatchPerfTest(boolean updateScalarsOnly) {
+    public void runBatchPerfTest(boolean scalarsOnly) {
         List<SimpleEntity> list = new ArrayList<>(numberEntities);
         for (int i = 0; i < numberEntities; i++) {
-            list.add(createEntity());
+            list.add(createEntity(scalarsOnly));
         }
         startBenchmark("insert");
         box.put(list);
         stopBenchmark();
 
         for (SimpleEntity entity : list) {
-            if (updateScalarsOnly) {
+            if (scalarsOnly) {
                 setRandomScalars(entity);
             } else {
                 setRandomValues(entity);
@@ -80,9 +80,6 @@ public class ObjectBoxPerfTest extends PerfTest {
         startBenchmark("update");
         box.put(list);
         stopBenchmark();
-        if (updateScalarsOnly) {
-            return;
-        }
 
         startBenchmark("load");
         List<SimpleEntity> reloaded = box.getAll();
@@ -113,9 +110,13 @@ public class ObjectBoxPerfTest extends PerfTest {
         entity.setSimpleFloat(random.nextFloat());
     }
 
-    public SimpleEntity createEntity() {
+    public SimpleEntity createEntity(boolean scalarsOnly) {
         SimpleEntity entity = new SimpleEntity();
-        setRandomValues(entity);
+        if(scalarsOnly) {
+            setRandomScalars(entity);
+        } else {
+            setRandomValues(entity);
+        }
         return entity;
     }
 

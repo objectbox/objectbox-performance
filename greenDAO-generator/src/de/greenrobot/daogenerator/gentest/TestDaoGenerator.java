@@ -78,11 +78,11 @@ public class TestDaoGenerator {
         notNull.addLongProperty("simpleLong").notNull();
         notNull.addFloatProperty("simpleFloat").notNull();
         notNull.addDoubleProperty("simpleDouble").notNull();
-        PropertyBuilder simpleString = notNull.addStringProperty("simpleString").notNull();
+        PropertyBuilder simpleString = notNull.addStringProperty("simpleString");
         if(indexed) {
             simpleString.index();
         }
-        notNull.addByteArrayProperty("simpleByteArray").notNull();
+        notNull.addByteArrayProperty("simpleByteArray");
     }
 
 

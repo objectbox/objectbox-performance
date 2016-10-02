@@ -66,7 +66,7 @@ public class GreendaoPerfTest extends PerfTest {
             case TestType.CRUD:
                 runBatchPerfTest(false);
                 break;
-            case TestType.UPDATE_SCALARS:
+            case TestType.CRUD_SCALARS:
                 runBatchPerfTest(true);
                 break;
             case TestType.CRUD_INDEXED:
@@ -78,17 +78,17 @@ public class GreendaoPerfTest extends PerfTest {
         }
     }
 
-    public void runBatchPerfTest(boolean updateScalarsOnly) {
+    public void runBatchPerfTest(boolean scalarsOnly) {
         List<SimpleEntityNotNull> list = new ArrayList<>(numberEntities);
         for (int i = 0; i < numberEntities; i++) {
-            list.add(createEntity((long) i));
+            list.add(createEntity((long) i, scalarsOnly));
         }
         startBenchmark("insert");
         dao.insertInTx(list);
         stopBenchmark();
 
         for (SimpleEntityNotNull entity : list) {
-            if (updateScalarsOnly) {
+            if (scalarsOnly) {
                 setRandomScalars(entity);
             } else {
                 setRandomValues(entity);
@@ -97,9 +97,6 @@ public class GreendaoPerfTest extends PerfTest {
         startBenchmark("update");
         dao.updateInTx(list);
         stopBenchmark();
-        if(updateScalarsOnly) {
-            return;
-        }
 
         startBenchmark("load");
         List<SimpleEntityNotNull> reloaded = dao.loadAll();
@@ -130,12 +127,16 @@ public class GreendaoPerfTest extends PerfTest {
         entity.setSimpleFloat(random.nextFloat());
     }
 
-    public SimpleEntityNotNull createEntity(Long key) {
+    public SimpleEntityNotNull createEntity(Long key, boolean scalarsOnly) {
         SimpleEntityNotNull entity = new SimpleEntityNotNull();
         if (key != null) {
             entity.setId(key);
         }
-        setRandomValues(entity);
+        if(scalarsOnly) {
+            setRandomScalars(entity);
+        } else {
+            setRandomValues(entity);
+        }
         return entity;
     }
 

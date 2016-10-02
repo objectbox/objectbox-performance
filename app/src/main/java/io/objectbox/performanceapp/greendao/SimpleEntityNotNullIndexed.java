@@ -20,11 +20,8 @@ public class SimpleEntityNotNullIndexed {
     private float simpleFloat;
     private double simpleDouble;
 
-    @NotNull
     @Index
     private String simpleString;
-
-    @NotNull
     private byte[] simpleByteArray;
 
     @Generated
@@ -113,23 +110,19 @@ public class SimpleEntityNotNullIndexed {
         this.simpleDouble = simpleDouble;
     }
 
-    @NotNull
     public String getSimpleString() {
         return simpleString;
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setSimpleString(@NotNull String simpleString) {
+    public void setSimpleString(String simpleString) {
         this.simpleString = simpleString;
     }
 
-    @NotNull
     public byte[] getSimpleByteArray() {
         return simpleByteArray;
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setSimpleByteArray(@NotNull byte[] simpleByteArray) {
+    public void setSimpleByteArray(byte[] simpleByteArray) {
         this.simpleByteArray = simpleByteArray;
     }
 

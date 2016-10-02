@@ -55,8 +55,8 @@ public class SimpleEntityNotNullIndexedDao extends AbstractDao<SimpleEntityNotNu
                 "\"SIMPLE_LONG\" INTEGER NOT NULL ," + // 5: simpleLong
                 "\"SIMPLE_FLOAT\" REAL NOT NULL ," + // 6: simpleFloat
                 "\"SIMPLE_DOUBLE\" REAL NOT NULL ," + // 7: simpleDouble
-                "\"SIMPLE_STRING\" TEXT NOT NULL ," + // 8: simpleString
-                "\"SIMPLE_BYTE_ARRAY\" BLOB NOT NULL );"); // 9: simpleByteArray
+                "\"SIMPLE_STRING\" TEXT," + // 8: simpleString
+                "\"SIMPLE_BYTE_ARRAY\" BLOB);"); // 9: simpleByteArray
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_SIMPLE_ENTITY_NOT_NULL_INDEXED_SIMPLE_STRING ON SIMPLE_ENTITY_NOT_NULL_INDEXED" +
                 " (\"SIMPLE_STRING\");");
@@ -79,8 +79,16 @@ public class SimpleEntityNotNullIndexedDao extends AbstractDao<SimpleEntityNotNu
         stmt.bindLong(6, entity.getSimpleLong());
         stmt.bindDouble(7, entity.getSimpleFloat());
         stmt.bindDouble(8, entity.getSimpleDouble());
-        stmt.bindString(9, entity.getSimpleString());
-        stmt.bindBlob(10, entity.getSimpleByteArray());
+ 
+        String simpleString = entity.getSimpleString();
+        if (simpleString != null) {
+            stmt.bindString(9, simpleString);
+        }
+ 
+        byte[] simpleByteArray = entity.getSimpleByteArray();
+        if (simpleByteArray != null) {
+            stmt.bindBlob(10, simpleByteArray);
+        }
     }
 
     @Override
@@ -94,8 +102,16 @@ public class SimpleEntityNotNullIndexedDao extends AbstractDao<SimpleEntityNotNu
         stmt.bindLong(6, entity.getSimpleLong());
         stmt.bindDouble(7, entity.getSimpleFloat());
         stmt.bindDouble(8, entity.getSimpleDouble());
-        stmt.bindString(9, entity.getSimpleString());
-        stmt.bindBlob(10, entity.getSimpleByteArray());
+ 
+        String simpleString = entity.getSimpleString();
+        if (simpleString != null) {
+            stmt.bindString(9, simpleString);
+        }
+ 
+        byte[] simpleByteArray = entity.getSimpleByteArray();
+        if (simpleByteArray != null) {
+            stmt.bindBlob(10, simpleByteArray);
+        }
     }
 
     @Override
@@ -114,8 +130,8 @@ public class SimpleEntityNotNullIndexedDao extends AbstractDao<SimpleEntityNotNu
             cursor.getLong(offset + 5), // simpleLong
             cursor.getFloat(offset + 6), // simpleFloat
             cursor.getDouble(offset + 7), // simpleDouble
-            cursor.getString(offset + 8), // simpleString
-            cursor.getBlob(offset + 9) // simpleByteArray
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // simpleString
+            cursor.isNull(offset + 9) ? null : cursor.getBlob(offset + 9) // simpleByteArray
         );
         return entity;
     }
@@ -130,8 +146,8 @@ public class SimpleEntityNotNullIndexedDao extends AbstractDao<SimpleEntityNotNu
         entity.setSimpleLong(cursor.getLong(offset + 5));
         entity.setSimpleFloat(cursor.getFloat(offset + 6));
         entity.setSimpleDouble(cursor.getDouble(offset + 7));
-        entity.setSimpleString(cursor.getString(offset + 8));
-        entity.setSimpleByteArray(cursor.getBlob(offset + 9));
+        entity.setSimpleString(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setSimpleByteArray(cursor.isNull(offset + 9) ? null : cursor.getBlob(offset + 9));
      }
     
     @Override

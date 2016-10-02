@@ -5,13 +5,13 @@ package io.objectbox.performanceapp;
  */
 public class TestType {
     public static final String CRUD = "Basic operations (CRUD)";
-    public static final String UPDATE_SCALARS = "Update Scalars";
-    public static final String CRUD_INDEXED = "Bulk operations (CRUD) - indexed";
+    public static final String CRUD_SCALARS = "Basic operations (CRUD) - scalars";
+    public static final String CRUD_INDEXED = "Basic operations (CRUD) - indexed";
     public static final String LOOK_UP_STRING = "Look up string using index";
 
     public static TestType[] ALL = {
             new TestType(CRUD, "crud"),
-            new TestType(UPDATE_SCALARS, "update-scalars"),
+            new TestType(CRUD_SCALARS, "crud-scalars"),
             new TestType(CRUD_INDEXED, "crud-indexed"),
             new TestType(LOOK_UP_STRING, "lookup-string"),
     };
