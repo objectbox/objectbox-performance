@@ -11,10 +11,6 @@ import io.objectbox.performanceapp.PerfTest;
 import io.objectbox.performanceapp.PerfTestRunner;
 import io.objectbox.performanceapp.TestType;
 
-/**
- * Created by Markus on 01.10.2016.
- */
-
 public class ObjectBoxPerfTest extends PerfTest {
     private BoxStore store;
 
@@ -65,6 +61,9 @@ public class ObjectBoxPerfTest extends PerfTest {
                 break;
             case TestType.QUERY_STRING_INDEXED:
                 runQueryByStringIndexed();
+                break;
+            case TestType.QUERY_ID:
+                runQueryById();
                 break;
         }
     }
@@ -275,6 +274,42 @@ public class ObjectBoxPerfTest extends PerfTest {
         }
         stopBenchmark();
         log("Entities found: " + entitiesFound);
+    }
+
+    private void runQueryById() {
+        List<SimpleEntity> entities = new ArrayList<>(numberEntities);
+        for (int i = 0; i < numberEntities; i++) {
+            entities.add(createEntity(false));
+        }
+
+        startBenchmark("insert");
+        box.put(entities);
+        stopBenchmark();
+
+        long[] idsToLookup = new long[numberEntities];
+        for (int i = 0; i < numberEntities; i++) {
+            idsToLookup[i] = 1 + random.nextInt(numberEntities);
+        }
+
+        startBenchmark("query");
+        for (int i = 0; i < numberEntities; i++) {
+            SimpleEntity entity = box.get(idsToLookup[i]);
+            accessAll(entity);
+        }
+        stopBenchmark();
+    }
+
+    private void accessAll(SimpleEntity entity) {
+        entity.getId();
+        entity.getSimpleBoolean();
+        entity.getSimpleByte();
+        entity.getSimpleShort();
+        entity.getSimpleInt();
+        entity.getSimpleLong();
+        entity.getSimpleFloat();
+        entity.getSimpleDouble();
+        entity.getSimpleString();
+        entity.getSimpleByteArray();
     }
 
     @Override

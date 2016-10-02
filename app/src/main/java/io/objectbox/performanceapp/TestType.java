@@ -9,6 +9,7 @@ public class TestType {
     public static final String CRUD_INDEXED = "Basic operations (CRUD) - indexed";
     public static final String QUERY_STRING = "Query by string";
     public static final String QUERY_STRING_INDEXED = "Query by string - index";
+    public static final String QUERY_ID = "Query by ID";
 
     public static TestType[] ALL = {
             new TestType(CRUD, "crud"),
@@ -16,6 +17,7 @@ public class TestType {
             new TestType(CRUD_INDEXED, "crud-indexed"),
             new TestType(QUERY_STRING, "query-string"),
             new TestType(QUERY_STRING_INDEXED, "query-string-indexed"),
+            new TestType(QUERY_ID, "query-id"),
     };
 
     public final String name;

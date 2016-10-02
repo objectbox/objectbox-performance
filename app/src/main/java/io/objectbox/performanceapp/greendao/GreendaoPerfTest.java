@@ -16,12 +16,9 @@ import io.objectbox.performanceapp.TestType;
 import io.objectbox.performanceapp.greendao.DaoMaster.DevOpenHelper;
 import io.objectbox.performanceapp.greendao.SimpleEntityIndexedDao.Properties;
 
-/**
- * Created by Markus on 01.10.2016.
- */
-
 public class GreendaoPerfTest extends PerfTest {
     public static final String DB_NAME = "sqlite-greendao";
+
     private Database db;
     private DaoSession daoSession;
     private SimpleEntityDao dao;
@@ -78,6 +75,9 @@ public class GreendaoPerfTest extends PerfTest {
             case TestType.QUERY_STRING_INDEXED:
                 runQueryByStringIndexed();
                 break;
+            case TestType.QUERY_ID:
+                runQueryById();
+                break;
         }
     }
 
@@ -110,7 +110,7 @@ public class GreendaoPerfTest extends PerfTest {
         stopBenchmark();
 
         startBenchmark("delete");
-        dao.deleteAll();
+        dao.deleteInTx(reloaded);
         stopBenchmark();
     }
 
@@ -183,7 +183,7 @@ public class GreendaoPerfTest extends PerfTest {
         stopBenchmark();
 
         startBenchmark("delete");
-        daoIndexed.deleteAll();
+        daoIndexed.deleteInTx(reloaded);
         stopBenchmark();
     }
 
@@ -295,6 +295,41 @@ public class GreendaoPerfTest extends PerfTest {
         log("Entities found: " + entitiesFound);
     }
 
+    private void runQueryById() {
+        List<SimpleEntity> entities = new ArrayList<>(numberEntities);
+        for (int i = 0; i < numberEntities; i++) {
+            entities.add(createEntity((long) i, false));
+        }
+
+        startBenchmark("insert");
+        dao.insertInTx(entities);
+        stopBenchmark();
+
+        long[] idsToLookup = new long[numberEntities];
+        for (int i = 0; i < numberEntities; i++) {
+            idsToLookup[i] = random.nextInt(numberEntities);
+        }
+
+        startBenchmark("query");
+        for (int i = 0; i < numberEntities; i++) {
+            SimpleEntity entity = dao.load(idsToLookup[i]);
+            accessAll(entity);
+        }
+        stopBenchmark();
+    }
+
+    private void accessAll(SimpleEntity entity) {
+        entity.getId();
+        entity.getSimpleBoolean();
+        entity.getSimpleByte();
+        entity.getSimpleShort();
+        entity.getSimpleInt();
+        entity.getSimpleLong();
+        entity.getSimpleFloat();
+        entity.getSimpleDouble();
+        entity.getSimpleString();
+        entity.getSimpleByteArray();
+    }
 
     @Override
     public void tearDown() {

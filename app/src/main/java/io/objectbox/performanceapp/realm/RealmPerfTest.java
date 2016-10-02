@@ -12,10 +12,6 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 
-/**
- * Created by Markus on 01.10.2016.
- */
-
 public class RealmPerfTest extends PerfTest {
 
     private boolean versionLoggedOnce;
@@ -59,6 +55,9 @@ public class RealmPerfTest extends PerfTest {
                 break;
             case TestType.QUERY_STRING_INDEXED:
                 runQueryByStringIndexed();
+                break;
+            case TestType.QUERY_ID:
+                runQueryById();
                 break;
         }
     }
@@ -281,6 +280,44 @@ public class RealmPerfTest extends PerfTest {
         }
         stopBenchmark();
         log("Entities found: " + entitiesFound);
+    }
+
+    private void runQueryById() {
+        List<SimpleEntity> entities = new ArrayList<>(numberEntities);
+        for (int i = 0; i < numberEntities; i++) {
+            entities.add(createEntity((long) i, false));
+        }
+
+        startBenchmark("insert");
+        realm.beginTransaction();
+        realm.insert(entities);
+        realm.commitTransaction();
+        stopBenchmark();
+
+        long[] idsToLookup = new long[numberEntities];
+        for (int i = 0; i < numberEntities; i++) {
+            idsToLookup[i] = random.nextInt(numberEntities);
+        }
+
+        startBenchmark("query");
+        for (int i = 0; i < numberEntities; i++) {
+            SimpleEntity entity = realm.where(SimpleEntity.class).equalTo("id", i).findFirst();
+            accessAll(entity);
+        }
+        stopBenchmark();
+    }
+
+    private void accessAll(SimpleEntity entity) {
+        entity.getId();
+        entity.getSimpleBoolean();
+        entity.getSimpleByte();
+        entity.getSimpleShort();
+        entity.getSimpleInt();
+        entity.getSimpleLong();
+        entity.getSimpleFloat();
+        entity.getSimpleDouble();
+        entity.getSimpleString();
+        entity.getSimpleByteArray();
     }
 
     @Override
