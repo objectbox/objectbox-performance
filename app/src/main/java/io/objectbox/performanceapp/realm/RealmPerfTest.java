@@ -1,49 +1,43 @@
-package io.objectbox.performanceapp.objectbox;
+package io.objectbox.performanceapp.realm;
 
 import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.objectbox.Box;
-import io.objectbox.BoxStore;
 import io.objectbox.performanceapp.PerfTest;
 import io.objectbox.performanceapp.PerfTestRunner;
 import io.objectbox.performanceapp.TestType;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 
 /**
  * Created by Markus on 01.10.2016.
  */
 
-public class ObjectBoxPerfTest extends PerfTest {
-    private BoxStore store;
+public class RealmPerfTest extends PerfTest {
 
     private boolean versionLoggedOnce;
-    private Box<SimpleEntity> box;
-    private Box<SimpleEntityIndexed> boxIndexed;
+    private Realm realm;
 
     @Override
     public String name() {
-        return "ObjectBox";
+        return "Realm";
     }
 
     public void setUp(Context context, PerfTestRunner testRunner) {
         super.setUp(context, testRunner);
-        store = MyObjectBox.builder().androidContext(context).build();
-        store.close();
-        store.deleteAllFiles();
-        store = MyObjectBox.builder().androidContext(context).maxSizeInKByte(200 * 1024).build();
-        box = store.boxFor(SimpleEntity.class);
-        boxIndexed = store.boxFor(SimpleEntityIndexed.class);
+        Realm.init(context);
+        realm = Realm.getDefaultInstance();
+
+        RealmConfiguration configuration = realm.getConfiguration();
+        realm.close();
+        Realm.deleteRealm(configuration);
+        realm = Realm.getDefaultInstance();
 
         if (!versionLoggedOnce) {
-            String versionNative = BoxStore.getVersionNative();
-            String versionJava = BoxStore.getVersion();
-            if (versionJava != null && versionJava.equals(versionJava)) {
-                log("ObjectBox " + versionNative);
-            } else {
-                log("ObjectBox " + versionNative + " (Java: " + versionJava + ")");
-            }
+            //log("Realm " + ??);
             versionLoggedOnce = true;
         }
     }
@@ -72,10 +66,12 @@ public class ObjectBoxPerfTest extends PerfTest {
     public void runBatchPerfTest(boolean scalarsOnly) {
         List<SimpleEntity> list = new ArrayList<>(numberEntities);
         for (int i = 0; i < numberEntities; i++) {
-            list.add(createEntity(scalarsOnly));
+            list.add(createEntity(i, scalarsOnly));
         }
         startBenchmark("insert");
-        box.put(list);
+        realm.beginTransaction();
+        realm.insert(list);
+        realm.commitTransaction();
         stopBenchmark();
 
         for (SimpleEntity entity : list) {
@@ -86,24 +82,23 @@ public class ObjectBoxPerfTest extends PerfTest {
             }
         }
         startBenchmark("update");
-        box.put(list);
+        realm.beginTransaction();
+        realm.insertOrUpdate(list);
+        realm.commitTransaction();
         stopBenchmark();
 
         startBenchmark("load");
-        List<SimpleEntity> reloaded = box.getAll();
+        RealmResults<SimpleEntity> reloaded = realm.where(SimpleEntity.class).findAll();
         stopBenchmark();
-
-//        reloaded = null;
-//        startBenchmark("load2");
-//        reloaded = box.getAll2();
-//        stopBenchmark();
 
         startBenchmark("access");
         accessAll(reloaded);
         stopBenchmark();
 
         startBenchmark("delete");
-        box.removeAll();
+        realm.beginTransaction();
+        reloaded.deleteAllFromRealm();
+        realm.commitTransaction();
         stopBenchmark();
     }
 
@@ -123,8 +118,9 @@ public class ObjectBoxPerfTest extends PerfTest {
         entity.setSimpleFloat(random.nextFloat());
     }
 
-    public SimpleEntity createEntity(boolean scalarsOnly) {
+    public SimpleEntity createEntity(long id, boolean scalarsOnly) {
         SimpleEntity entity = new SimpleEntity();
+        entity.setId(id);
         if (scalarsOnly) {
             setRandomScalars(entity);
         } else {
@@ -151,29 +147,37 @@ public class ObjectBoxPerfTest extends PerfTest {
     public void runBatchPerfTestIndexed() {
         List<SimpleEntityIndexed> list = new ArrayList<>(numberEntities);
         for (int i = 0; i < numberEntities; i++) {
-            list.add(createEntityIndexed());
+            list.add(createEntityIndexed(i));
         }
         startBenchmark("insert");
-        boxIndexed.put(list);
+        realm.beginTransaction();
+        realm.insert(list);
+        realm.commitTransaction();
         stopBenchmark();
 
         for (SimpleEntityIndexed entity : list) {
             setRandomValues(entity);
         }
         startBenchmark("update");
-        boxIndexed.put(list);
+        realm.beginTransaction();
+        realm.insertOrUpdate(list);
+        realm.commitTransaction();
         stopBenchmark();
 
+        log("Count: " + realm.where(SimpleEntity.class).count());
+
         startBenchmark("load");
-        List<SimpleEntityIndexed> reloaded = boxIndexed.getAll();
+        RealmResults<SimpleEntity> reloaded = realm.where(SimpleEntity.class).findAll();
         stopBenchmark();
 
         startBenchmark("access");
-        accessAllIndexed(reloaded);
+        accessAll(reloaded);
         stopBenchmark();
 
         startBenchmark("delete");
-        boxIndexed.removeAll();
+        realm.beginTransaction();
+        reloaded.deleteAllFromRealm();
+        realm.commitTransaction();
         stopBenchmark();
     }
 
@@ -189,8 +193,9 @@ public class ObjectBoxPerfTest extends PerfTest {
         entity.setSimpleByteArray(randomBytes());
     }
 
-    public SimpleEntityIndexed createEntityIndexed() {
+    public SimpleEntityIndexed createEntityIndexed(long id) {
         SimpleEntityIndexed entity = new SimpleEntityIndexed();
+        entity.setId(id);
         setRandomValues(entity);
         return entity;
     }
@@ -217,11 +222,13 @@ public class ObjectBoxPerfTest extends PerfTest {
         }
         List<SimpleEntity> entities = new ArrayList<>(numberEntities);
         for (int i = 0; i < numberEntities; i++) {
-            entities.add(createEntity(false));
+            entities.add(createEntity(i, false));
         }
 
         startBenchmark("insert");
-        box.put(entities);
+        realm.beginTransaction();
+        realm.insert(entities);
+        realm.commitTransaction();
         stopBenchmark();
 
         final String[] stringsToLookup = new String[numberEntities];
@@ -234,11 +241,9 @@ public class ObjectBoxPerfTest extends PerfTest {
         }
 
         startBenchmark("query");
-
-        final int propertyId = box.getPropertyId(SimpleEntityProperties.SimpleString.dbName);
         long entitiesFound = 0;
         for (int i = 0; i < numberEntities; i++) {
-            List<SimpleEntity> result = box.find(propertyId, stringsToLookup[i]);
+            List<SimpleEntity> result = realm.where(SimpleEntity.class).equalTo("simpleString", stringsToLookup[i]).findAll();
             accessAll(result);
             entitiesFound += result.size();
         }
@@ -249,11 +254,13 @@ public class ObjectBoxPerfTest extends PerfTest {
     private void runQueryByStringIndexed() {
         List<SimpleEntityIndexed> entities = new ArrayList<>(numberEntities);
         for (int i = 0; i < numberEntities; i++) {
-            entities.add(createEntityIndexed());
+            entities.add(createEntityIndexed(i));
         }
 
         startBenchmark("insert");
-        boxIndexed.put(entities);
+        realm.beginTransaction();
+        realm.insert(entities);
+        realm.commitTransaction();
         stopBenchmark();
 
         final String[] stringsToLookup = new String[numberEntities];
@@ -266,10 +273,9 @@ public class ObjectBoxPerfTest extends PerfTest {
         }
 
         startBenchmark("query");
-        final int propertyId = boxIndexed.getPropertyId(SimpleEntityIndexedProperties.SimpleString.dbName);
         long entitiesFound = 0;
         for (int i = 0; i < numberEntities; i++) {
-            List<SimpleEntityIndexed> result = boxIndexed.find(propertyId, stringsToLookup[i]);
+            List<SimpleEntityIndexed> result = realm.where(SimpleEntityIndexed.class).equalTo("simpleString", stringsToLookup[i]).findAll();
             accessAllIndexed(result);
             entitiesFound += result.size();
         }
@@ -279,8 +285,9 @@ public class ObjectBoxPerfTest extends PerfTest {
 
     @Override
     public void tearDown() {
-        store.close();
-        store.deleteAllFiles();
+        RealmConfiguration configuration = realm.getConfiguration();
+        realm.close();
+        Realm.deleteRealm(configuration);
     }
 
 }

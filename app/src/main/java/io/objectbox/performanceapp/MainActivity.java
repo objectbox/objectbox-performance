@@ -19,6 +19,7 @@ import java.util.List;
 import io.objectbox.performanceapp.PerfTestRunner.Callback;
 import io.objectbox.performanceapp.greendao.GreendaoPerfTest;
 import io.objectbox.performanceapp.objectbox.ObjectBoxPerfTest;
+import io.objectbox.performanceapp.realm.RealmPerfTest;
 
 public class MainActivity extends Activity implements Callback {
     private TextView textViewResults;
@@ -78,6 +79,9 @@ public class MainActivity extends Activity implements Callback {
         List<PerfTest> tests = new ArrayList<>();
         if (objectBox) {
             tests.add(new ObjectBoxPerfTest());
+        }
+        if (realm) {
+            tests.add(new RealmPerfTest());
         }
         if (sqlite) {
             tests.add(new GreendaoPerfTest());

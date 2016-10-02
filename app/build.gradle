@@ -11,11 +11,13 @@ buildscript {
     }
     dependencies {
         classpath "io.objectbox:objectbox-gradle-plugin:0.8.0-SNAPSHOT"
+        classpath 'io.realm:realm-gradle-plugin:2.0.0'
     }
 }
 
 apply plugin: 'io.objectbox'
 apply plugin: 'com.android.application'
+apply plugin: 'realm-android'
 
 repositories {
     maven {
@@ -42,11 +44,17 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
         }
         releaseDebugCert {
             initWith release
             // Just to use without checkjni
             signingConfig signingConfigs.debug
+        }
+        debugJniNoDebug {
+            initWith debug
+            // Just to use without checkjni
+            jniDebuggable false
         }
     }
 }
