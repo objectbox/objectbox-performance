@@ -9,6 +9,13 @@ public class TestType {
     public static final String CRUD_INDEXED = "Bulk operations (CRUD) - indexed";
     public static final String LOOK_UP_STRING = "Look up string using index";
 
+    public static TestType[] ALL = {
+            new TestType(CRUD, "crud"),
+            new TestType(UPDATE_SCALARS, "update-scalars"),
+            new TestType(CRUD_INDEXED, "crud-indexed"),
+            new TestType(LOOK_UP_STRING, "lookup-string"),
+    };
+
     public final String name;
     public final String nameShort;
 

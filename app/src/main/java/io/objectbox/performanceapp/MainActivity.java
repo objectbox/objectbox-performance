@@ -21,12 +21,6 @@ import io.objectbox.performanceapp.greendao.GreendaoPerfTest;
 import io.objectbox.performanceapp.objectbox.ObjectBoxPerfTest;
 
 public class MainActivity extends Activity implements Callback {
-    TestType[] TYPES = {
-            new TestType(TestType.CRUD, "crud"),
-            new TestType(TestType.UPDATE_SCALARS, "update-scalars"),
-            new TestType(TestType.CRUD_INDEXED, "crud-indexed"),
-            new TestType(TestType.LOOK_UP_STRING, "lookup-string"),
-    };
     private TextView textViewResults;
     private Button buttonRun;
     private PerfTestRunner testRunner;
@@ -64,7 +58,7 @@ public class MainActivity extends Activity implements Callback {
                 runTests(type, runs, numberEntities, objectBox, realm, sqlite);
             }
         });
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, TYPES);
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, TestType.ALL);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ((Spinner) findViewById(R.id.spinnerTestType)).setAdapter(adapter);
         textViewResults = ((TextView) findViewById(R.id.textViewResults));
