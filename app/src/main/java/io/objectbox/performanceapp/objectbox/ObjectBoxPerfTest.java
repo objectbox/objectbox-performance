@@ -63,7 +63,10 @@ public class ObjectBoxPerfTest extends PerfTest {
                 runQueryByStringIndexed();
                 break;
             case TestType.QUERY_ID:
-                runQueryById();
+                runQueryById(false);
+                break;
+            case TestType.QUERY_ID_RANDOM:
+                runQueryById(true);
                 break;
         }
     }
@@ -276,7 +279,7 @@ public class ObjectBoxPerfTest extends PerfTest {
         log("Entities found: " + entitiesFound);
     }
 
-    private void runQueryById() {
+    private void runQueryById(boolean randomIds) {
         List<SimpleEntity> entities = new ArrayList<>(numberEntities);
         for (int i = 0; i < numberEntities; i++) {
             entities.add(createEntity(false));
@@ -288,7 +291,7 @@ public class ObjectBoxPerfTest extends PerfTest {
 
         long[] idsToLookup = new long[numberEntities];
         for (int i = 0; i < numberEntities; i++) {
-            idsToLookup[i] = 1 + random.nextInt(numberEntities);
+            idsToLookup[i] = randomIds ? 1 + random.nextInt(numberEntities) : 1 + i;
         }
 
         startBenchmark("query");

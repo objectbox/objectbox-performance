@@ -57,7 +57,10 @@ public class RealmPerfTest extends PerfTest {
                 runQueryByStringIndexed();
                 break;
             case TestType.QUERY_ID:
-                runQueryById();
+                runQueryById(false);
+                break;
+            case TestType.QUERY_ID_RANDOM:
+                runQueryById(true);
                 break;
         }
     }
@@ -282,7 +285,7 @@ public class RealmPerfTest extends PerfTest {
         log("Entities found: " + entitiesFound);
     }
 
-    private void runQueryById() {
+    private void runQueryById(boolean randomIds) {
         List<SimpleEntity> entities = new ArrayList<>(numberEntities);
         for (int i = 0; i < numberEntities; i++) {
             entities.add(createEntity((long) i, false));
@@ -296,7 +299,7 @@ public class RealmPerfTest extends PerfTest {
 
         long[] idsToLookup = new long[numberEntities];
         for (int i = 0; i < numberEntities; i++) {
-            idsToLookup[i] = random.nextInt(numberEntities);
+            idsToLookup[i] = randomIds ? random.nextInt(numberEntities) : i;
         }
 
         startBenchmark("query");
