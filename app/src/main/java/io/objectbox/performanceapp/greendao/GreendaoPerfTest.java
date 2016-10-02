@@ -72,8 +72,11 @@ public class GreendaoPerfTest extends PerfTest {
             case TestType.CRUD_INDEXED:
                 runBatchPerfTestIndexed();
                 break;
-            case TestType.LOOK_UP_STRING:
-                runLookupString();
+            case TestType.QUERY_STRING:
+                runQueryByString();
+                break;
+            case TestType.QUERY_STRING_INDEXED:
+                runQueryByStringIndexed();
                 break;
         }
     }
@@ -132,7 +135,7 @@ public class GreendaoPerfTest extends PerfTest {
         if (key != null) {
             entity.setId(key);
         }
-        if(scalarsOnly) {
+        if (scalarsOnly) {
             setRandomScalars(entity);
         } else {
             setRandomValues(entity);
@@ -220,7 +223,45 @@ public class GreendaoPerfTest extends PerfTest {
         }
     }
 
-    private void runLookupString() {
+    private void runQueryByString() {
+        if (numberEntities > 10000) {
+            log("Reduce number of entities to 10000 to avoid extremely long test runs");
+            return;
+        }
+        List<SimpleEntity> entities = new ArrayList<>(numberEntities);
+        for (int i = 0; i < numberEntities; i++) {
+            entities.add(createEntity((long) i, false));
+        }
+
+        startBenchmark("insert");
+        dao.insertInTx(entities);
+        stopBenchmark();
+
+        String[] stringsToLookup = new String[numberEntities];
+        for (int i = 0; i < numberEntities; i++) {
+            String text = "";
+            while (text.length() < 2) {
+                text = entities.get(random.nextInt(numberEntities)).getSimpleString();
+            }
+            stringsToLookup[i] = text;
+        }
+
+        long entitiesFound = 0;
+        startBenchmark("query");
+        Query<SimpleEntity> query = dao.queryBuilder().where(SimpleEntityDao.Properties.SimpleString.eq(null)).build();
+        db.beginTransaction();
+        for (int i = 0; i < numberEntities; i++) {
+            query.setParameter(0, stringsToLookup[i]);
+            List<SimpleEntity> result = query.list();
+            accessAll(result);
+            entitiesFound += result.size();
+        }
+        db.endTransaction();
+        stopBenchmark();
+        log("Entities found: " + entitiesFound);
+    }
+
+    private void runQueryByStringIndexed() {
         List<SimpleEntityIndexed> entities = new ArrayList<>(numberEntities);
         for (int i = 0; i < numberEntities; i++) {
             entities.add(createEntityIndexed((long) i));
@@ -239,15 +280,19 @@ public class GreendaoPerfTest extends PerfTest {
             stringsToLookup[i] = text;
         }
 
-        startBenchmark("lookup-indexed");
+        long entitiesFound = 0;
+        startBenchmark("query");
         Query<SimpleEntityIndexed> query = daoIndexed.queryBuilder().where(Properties.SimpleString.eq(null)).build();
         db.beginTransaction();
         for (int i = 0; i < numberEntities; i++) {
             query.setParameter(0, stringsToLookup[i]);
             List<SimpleEntityIndexed> result = query.list();
+            accessAllIndexed(result);
+            entitiesFound += result.size();
         }
         db.endTransaction();
         stopBenchmark();
+        log("Entities found: " + entitiesFound);
     }
 
 

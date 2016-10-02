@@ -55,8 +55,11 @@ public class ObjectBoxPerfTest extends PerfTest {
             case TestType.CRUD_INDEXED:
                 runBatchPerfTestIndexed();
                 break;
-            case TestType.LOOK_UP_STRING:
-                runLookupString();
+            case TestType.QUERY_STRING:
+                runQueryByString();
+                break;
+            case TestType.QUERY_STRING_INDEXED:
+                runQueryByStringIndexed();
                 break;
         }
     }
@@ -112,7 +115,7 @@ public class ObjectBoxPerfTest extends PerfTest {
 
     public SimpleEntity createEntity(boolean scalarsOnly) {
         SimpleEntity entity = new SimpleEntity();
-        if(scalarsOnly) {
+        if (scalarsOnly) {
             setRandomScalars(entity);
         } else {
             setRandomValues(entity);
@@ -197,7 +200,46 @@ public class ObjectBoxPerfTest extends PerfTest {
         }
     }
 
-    private void runLookupString() {
+    private void runQueryByString() {
+        if (numberEntities > 10000) {
+            log("Reduce number of entities to 10000 to avoid extremely long test runs");
+            return;
+        }
+        List<SimpleEntity> entities = new ArrayList<>(numberEntities);
+        for (int i = 0; i < numberEntities; i++) {
+            entities.add(createEntity(false));
+        }
+
+        startBenchmark("insert");
+        box.put(entities);
+        stopBenchmark();
+
+        final String[] stringsToLookup = new String[numberEntities];
+        for (int i = 0; i < numberEntities; i++) {
+            String text = "";
+            while (text.length() < 2) {
+                text = entities.get(random.nextInt(numberEntities)).getSimpleString();
+            }
+            stringsToLookup[i] = text;
+        }
+
+        startBenchmark("query");
+        store.runInTx(new Runnable() {
+            @Override
+            public void run() {
+                long entitiesFound = 0;
+                for (int i = 0; i < numberEntities; i++) {
+                    List<SimpleEntity> entities = box.find(SimpleEntityProperties.SimpleString, stringsToLookup[i]);
+                    accessAll(entities);
+                    entitiesFound += entities.size();
+                }
+                log("Entities found: " + entitiesFound);
+            }
+        });
+        stopBenchmark();
+    }
+
+    private void runQueryByStringIndexed() {
         List<SimpleEntityIndexed> entities = new ArrayList<>(numberEntities);
         for (int i = 0; i < numberEntities; i++) {
             entities.add(createEntityIndexed());
@@ -216,18 +258,23 @@ public class ObjectBoxPerfTest extends PerfTest {
             stringsToLookup[i] = text;
         }
 
-        startBenchmark("lookup-indexed");
+        startBenchmark("query");
+        final long[] entitiesFoundHolder = {0};
         store.runInTx(new Runnable() {
             @Override
             public void run() {
+                long entitiesFound = 0;
                 for (int i = 0; i < numberEntities; i++) {
                     List<SimpleEntityIndexed> entities =
                             boxIndexed.find(SimpleEntityIndexedProperties.SimpleString, stringsToLookup[i]);
                     accessAllIndexed(entities);
+                    entitiesFound += entities.size();
                 }
+                entitiesFoundHolder[0] = entitiesFound;
             }
         });
         stopBenchmark();
+        log("Entities found: " + entitiesFoundHolder[0]);
     }
 
     @Override
