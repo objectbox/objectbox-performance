@@ -113,7 +113,7 @@ public class PerfTestRunner {
 
     private void run(TestType type, PerfTest test) {
         test.setNumberEntities(numberEntities);
-        Benchmark benchmark = createBenchmark(type, test);
+        Benchmark benchmark = createBenchmark(type, test, numberEntities);
         test.setBenchmark(benchmark);
         log("Starting tests with " + numberEntities + " entities at " + new Date());
         for (int i = 1; i <= runs; i++) {
@@ -147,8 +147,8 @@ public class PerfTestRunner {
         log("\nTests done at " + new Date());
     }
 
-    protected Benchmark createBenchmark(TestType type, PerfTest test) {
-        String name = test.name() + "-" + type.nameShort + ".tsv";
+    protected Benchmark createBenchmark(TestType type, PerfTest test, int numberEntities) {
+        String name = test.name() + "-" + type.nameShort + "-" + numberEntities + ".tsv";
         File dir = Environment.getExternalStorageDirectory();
         File file = new File(dir, name);
         if (dir == null || !dir.canWrite()) {

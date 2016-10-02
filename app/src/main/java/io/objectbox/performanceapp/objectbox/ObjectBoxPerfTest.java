@@ -50,10 +50,13 @@ public class ObjectBoxPerfTest extends PerfTest {
     @Override
     public void run(TestType type) {
         switch (type.name) {
-            case TestType.BULK_OPERATIONS:
-                runBatchPerfTest();
+            case TestType.CRUD:
+                runBatchPerfTest(false);
                 break;
-            case TestType.BULK_OPERATIONS_INDEXED:
+            case TestType.UPDATE_SCALARS:
+                runBatchPerfTest(true);
+                break;
+            case TestType.CRUD_INDEXED:
                 runBatchPerfTestIndexed();
                 break;
             case TestType.LOOK_UP_STRING:
@@ -62,7 +65,7 @@ public class ObjectBoxPerfTest extends PerfTest {
         }
     }
 
-    public void runBatchPerfTest() {
+    public void runBatchPerfTest(boolean updateScalarsOnly) {
         List<SimpleEntity> list = new ArrayList<>(numberEntities);
         for (int i = 0; i < numberEntities; i++) {
             list.add(createEntity());
@@ -72,11 +75,18 @@ public class ObjectBoxPerfTest extends PerfTest {
         stopBenchmark();
 
         for (SimpleEntity entity : list) {
-            setRandomValues(entity);
+            if (updateScalarsOnly) {
+                setRandomScalars(entity);
+            } else {
+                setRandomValues(entity);
+            }
         }
         startBenchmark("update");
         box.put(list);
         stopBenchmark();
+        if(updateScalarsOnly) {
+            return;
+        }
 
         startBenchmark("load");
         List<SimpleEntity> reloaded = box.getAll();
@@ -92,6 +102,12 @@ public class ObjectBoxPerfTest extends PerfTest {
     }
 
     protected void setRandomValues(SimpleEntity entity) {
+        setRandomScalars(entity);
+        entity.setSimpleString(randomString());
+        entity.setSimpleByteArray(randomBytes());
+    }
+
+    private void setRandomScalars(SimpleEntity entity) {
         entity.setSimpleBoolean(random.nextBoolean());
         entity.setSimpleByte((byte) random.nextInt());
         entity.setSimpleShort((short) random.nextInt());
@@ -99,8 +115,6 @@ public class ObjectBoxPerfTest extends PerfTest {
         entity.setSimpleLong(random.nextLong());
         entity.setSimpleDouble(random.nextDouble());
         entity.setSimpleFloat(random.nextFloat());
-        entity.setSimpleString(randomString());
-        //entity.setSimpleByteArray(randomBytes());
     }
 
     public SimpleEntity createEntity() {

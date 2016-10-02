@@ -62,10 +62,13 @@ public class GreendaoPerfTest extends PerfTest {
     @Override
     public void run(TestType type) {
         switch (type.name) {
-            case TestType.BULK_OPERATIONS:
-                runBatchPerfTest();
+            case TestType.CRUD:
+                runBatchPerfTest(false);
                 break;
-            case TestType.BULK_OPERATIONS_INDEXED:
+            case TestType.UPDATE_SCALARS:
+                runBatchPerfTest(true);
+                break;
+            case TestType.CRUD_INDEXED:
                 runBatchPerfTestIndexed();
                 break;
             case TestType.LOOK_UP_STRING:
@@ -74,7 +77,7 @@ public class GreendaoPerfTest extends PerfTest {
         }
     }
 
-    public void runBatchPerfTest() {
+    public void runBatchPerfTest(boolean updateScalarsOnly) {
         List<SimpleEntityNotNull> list = new ArrayList<>(numberEntities);
         for (int i = 0; i < numberEntities; i++) {
             list.add(createEntity((long) i));
@@ -84,11 +87,18 @@ public class GreendaoPerfTest extends PerfTest {
         stopBenchmark();
 
         for (SimpleEntityNotNull entity : list) {
-            setRandomValues(entity);
+            if (updateScalarsOnly) {
+                setRandomScalars(entity);
+            } else {
+                setRandomValues(entity);
+            }
         }
         startBenchmark("update");
         dao.updateInTx(list);
         stopBenchmark();
+        if(updateScalarsOnly) {
+            return;
+        }
 
         startBenchmark("load");
         List<SimpleEntityNotNull> reloaded = dao.loadAll();
@@ -104,6 +114,12 @@ public class GreendaoPerfTest extends PerfTest {
     }
 
     protected void setRandomValues(SimpleEntityNotNull entity) {
+        setRandomScalars(entity);
+        entity.setSimpleString(randomString());
+        entity.setSimpleByteArray(randomBytes());
+    }
+
+    private void setRandomScalars(SimpleEntityNotNull entity) {
         entity.setSimpleBoolean(random.nextBoolean());
         entity.setSimpleByte((byte) random.nextInt());
         entity.setSimpleShort((short) random.nextInt());
@@ -111,8 +127,6 @@ public class GreendaoPerfTest extends PerfTest {
         entity.setSimpleLong(random.nextLong());
         entity.setSimpleDouble(random.nextDouble());
         entity.setSimpleFloat(random.nextFloat());
-        entity.setSimpleString(randomString());
-        entity.setSimpleByteArray(randomBytes());
     }
 
     public SimpleEntityNotNull createEntity(Long key) {
@@ -138,7 +152,6 @@ public class GreendaoPerfTest extends PerfTest {
             entity.getSimpleByteArray();
         }
     }
-
 
     public void runBatchPerfTestIndexed() {
         List<SimpleEntityNotNullIndexed> list = new ArrayList<>(numberEntities);

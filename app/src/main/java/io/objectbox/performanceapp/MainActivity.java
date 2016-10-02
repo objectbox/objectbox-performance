@@ -22,8 +22,9 @@ import io.objectbox.performanceapp.objectbox.ObjectBoxPerfTest;
 
 public class MainActivity extends Activity implements Callback {
     TestType[] TYPES = {
-            new TestType(TestType.BULK_OPERATIONS, "bulk"),
-            new TestType(TestType.BULK_OPERATIONS_INDEXED, "bulk-indexed"),
+            new TestType(TestType.CRUD, "crud"),
+            new TestType(TestType.UPDATE_SCALARS, "update-scalars"),
+            new TestType(TestType.CRUD_INDEXED, "crud-indexed"),
             new TestType(TestType.LOOK_UP_STRING, "lookup-string"),
     };
     private TextView textViewResults;
