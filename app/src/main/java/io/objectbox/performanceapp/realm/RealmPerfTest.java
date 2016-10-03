@@ -89,6 +89,8 @@ public class RealmPerfTest extends PerfTest {
         realm.commitTransaction();
         stopBenchmark();
 
+        list = null;
+
         startBenchmark("load");
         RealmResults<SimpleEntity> reloaded = realm.where(SimpleEntity.class).findAll();
         stopBenchmark();
@@ -166,14 +168,14 @@ public class RealmPerfTest extends PerfTest {
         realm.commitTransaction();
         stopBenchmark();
 
-        log("Count: " + realm.where(SimpleEntity.class).count());
+        list = null;
 
         startBenchmark("load");
-        RealmResults<SimpleEntity> reloaded = realm.where(SimpleEntity.class).findAll();
+        RealmResults<SimpleEntityIndexed> reloaded = realm.where(SimpleEntityIndexed.class).findAll();
         stopBenchmark();
 
         startBenchmark("access");
-        accessAll(reloaded);
+        accessAllIndexed(reloaded);
         stopBenchmark();
 
         startBenchmark("delete");

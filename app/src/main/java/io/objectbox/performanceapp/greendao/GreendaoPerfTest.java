@@ -104,6 +104,8 @@ public class GreendaoPerfTest extends PerfTest {
         dao.updateInTx(list);
         stopBenchmark();
 
+        list = null;
+
         startBenchmark("load");
         List<SimpleEntity> reloaded = dao.loadAll();
         stopBenchmark();
@@ -176,6 +178,8 @@ public class GreendaoPerfTest extends PerfTest {
         startBenchmark("update");
         daoIndexed.updateInTx(list);
         stopBenchmark();
+
+        list = null;
 
         startBenchmark("load");
         List<SimpleEntityIndexed> reloaded = daoIndexed.loadAll();
@@ -310,7 +314,7 @@ public class GreendaoPerfTest extends PerfTest {
 
         long[] idsToLookup = new long[numberEntities];
         for (int i = 0; i < numberEntities; i++) {
-            idsToLookup[i] = randomIds? random.nextInt(numberEntities): i;
+            idsToLookup[i] = randomIds ? random.nextInt(numberEntities) : i;
         }
 
         startBenchmark("query");

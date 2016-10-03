@@ -91,6 +91,8 @@ public class ObjectBoxPerfTest extends PerfTest {
         box.put(list);
         stopBenchmark();
 
+        list = null;
+
         startBenchmark("load");
         List<SimpleEntity> reloaded = box.getAll();
         stopBenchmark();
@@ -105,7 +107,7 @@ public class ObjectBoxPerfTest extends PerfTest {
         stopBenchmark();
 
         startBenchmark("delete");
-        box.removeAll();
+        box.remove(reloaded);
         stopBenchmark();
     }
 
@@ -166,6 +168,8 @@ public class ObjectBoxPerfTest extends PerfTest {
         boxIndexed.put(list);
         stopBenchmark();
 
+        list = null;
+
         startBenchmark("load");
         List<SimpleEntityIndexed> reloaded = boxIndexed.getAll();
         stopBenchmark();
@@ -175,7 +179,7 @@ public class ObjectBoxPerfTest extends PerfTest {
         stopBenchmark();
 
         startBenchmark("delete");
-        boxIndexed.removeAll();
+        boxIndexed.remove(reloaded);
         stopBenchmark();
     }
 
