@@ -54,12 +54,14 @@ public class PerfTestRunner {
                 try {
                     for (PerfTest test : tests) {
                         if (!destroyed) {
-                            PerfTestRunner.this.run(type, test);
+                            try {
+                                PerfTestRunner.this.run(type, test);
+                            } catch (Exception e) {
+                                log("Aborted because of " + e.getMessage());
+                                Log.e("PERF", "Error while running tests", e);
+                            }
                         }
                     }
-                } catch (Exception e) {
-                    log("Aborted because of " + e.getMessage());
-                    Log.e("PERF", "Error while running tests", e);
                 } finally {
                     running = false;
                     callback.done();
