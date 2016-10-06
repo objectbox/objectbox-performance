@@ -62,6 +62,12 @@ public class ObjectBoxPerfTest extends PerfTest {
             case TestType.QUERY_STRING_INDEXED:
                 runQueryByStringIndexed();
                 break;
+            case TestType.QUERY_INTEGER:
+                runQueryByInteger();
+                break;
+            case TestType.QUERY_INTEGER_INDEXED:
+                runQueryByIntegerIndexed();
+                break;
             case TestType.QUERY_ID:
                 runQueryById(false);
                 break;
@@ -72,13 +78,7 @@ public class ObjectBoxPerfTest extends PerfTest {
     }
 
     public void runBatchPerfTest(boolean scalarsOnly) {
-        List<SimpleEntity> list = new ArrayList<>(numberEntities);
-        for (int i = 0; i < numberEntities; i++) {
-            list.add(createEntity(scalarsOnly));
-        }
-        startBenchmark("insert");
-        box.put(list);
-        stopBenchmark();
+        List<SimpleEntity> list = prepareAndPutEntities(scalarsOnly);
 
         for (SimpleEntity entity : list) {
             if (scalarsOnly) {
@@ -153,13 +153,7 @@ public class ObjectBoxPerfTest extends PerfTest {
     }
 
     public void runBatchPerfTestIndexed() {
-        List<SimpleEntityIndexed> list = new ArrayList<>(numberEntities);
-        for (int i = 0; i < numberEntities; i++) {
-            list.add(createEntityIndexed());
-        }
-        startBenchmark("insert");
-        boxIndexed.put(list);
-        stopBenchmark();
+        List<SimpleEntityIndexed> list = prepareAndPutEntitiesIndexed();
 
         for (SimpleEntityIndexed entity : list) {
             setRandomValues(entity);
@@ -221,14 +215,7 @@ public class ObjectBoxPerfTest extends PerfTest {
             log("Reduce number of entities to 10000 to avoid extremely long test runs");
             return;
         }
-        List<SimpleEntity> entities = new ArrayList<>(numberEntities);
-        for (int i = 0; i < numberEntities; i++) {
-            entities.add(createEntity(false));
-        }
-
-        startBenchmark("insert");
-        box.put(entities);
-        stopBenchmark();
+        List<SimpleEntity> entities = prepareAndPutEntities(false);
 
         final String[] stringsToLookup = new String[numberEntities];
         for (int i = 0; i < numberEntities; i++) {
@@ -252,15 +239,43 @@ public class ObjectBoxPerfTest extends PerfTest {
         log("Entities found: " + entitiesFound);
     }
 
-    private void runQueryByStringIndexed() {
-        List<SimpleEntityIndexed> entities = new ArrayList<>(numberEntities);
+    private void runQueryByInteger() {
+        if (numberEntities > 10000) {
+            log("Reduce number of entities to 10000 to avoid extremely long test runs");
+            return;
+        }
+        List<SimpleEntity> entities = prepareAndPutEntities(false);
+        final int[] valuesToLookup = new int[numberEntities];
         for (int i = 0; i < numberEntities; i++) {
-            entities.add(createEntityIndexed());
+            valuesToLookup[i] = entities.get(random.nextInt(numberEntities)).getSimpleInt();
+        }
+
+        startBenchmark("query");
+        final int propertyId = box.getPropertyId(SimpleEntityProperties.SimpleInt.dbName);
+        long entitiesFound = 0;
+        for (int i = 0; i < numberEntities; i++) {
+            List<SimpleEntity> result = box.find(propertyId, valuesToLookup[i]);
+            accessAll(result);
+            entitiesFound += result.size();
+        }
+        stopBenchmark();
+        log("Entities found: " + entitiesFound);
+    }
+
+    private List<SimpleEntity> prepareAndPutEntities(boolean scalarsOnly) {
+        List<SimpleEntity> entities = new ArrayList<>(numberEntities);
+        for (int i = 0; i < numberEntities; i++) {
+            entities.add(createEntity(scalarsOnly));
         }
 
         startBenchmark("insert");
-        boxIndexed.put(entities);
+        box.put(entities);
         stopBenchmark();
+        return entities;
+    }
+
+    private void runQueryByStringIndexed() {
+        List<SimpleEntityIndexed> entities = prepareAndPutEntitiesIndexed();
 
         final String[] stringsToLookup = new String[numberEntities];
         for (int i = 0; i < numberEntities; i++) {
@@ -283,15 +298,39 @@ public class ObjectBoxPerfTest extends PerfTest {
         log("Entities found: " + entitiesFound);
     }
 
-    private void runQueryById(boolean randomIds) {
-        List<SimpleEntity> entities = new ArrayList<>(numberEntities);
+    private void runQueryByIntegerIndexed() {
+        List<SimpleEntityIndexed> entities = prepareAndPutEntitiesIndexed();
+        final int[] valuesToLookup = new int[numberEntities];
         for (int i = 0; i < numberEntities; i++) {
-            entities.add(createEntity(false));
+            valuesToLookup[i] = entities.get(random.nextInt(numberEntities)).getSimpleInt();
+        }
+
+        startBenchmark("query");
+        final int propertyId = box.getPropertyId(SimpleEntityIndexedProperties.SimpleInt.dbName);
+        long entitiesFound = 0;
+        for (int i = 0; i < numberEntities; i++) {
+            List<SimpleEntityIndexed> result = boxIndexed.find(propertyId, valuesToLookup[i]);
+            accessAllIndexed(result);
+            entitiesFound += result.size();
+        }
+        stopBenchmark();
+        log("Entities found: " + entitiesFound);
+    }
+
+    private List<SimpleEntityIndexed> prepareAndPutEntitiesIndexed() {
+        List<SimpleEntityIndexed> entities = new ArrayList<>(numberEntities);
+        for (int i = 0; i < numberEntities; i++) {
+            entities.add(createEntityIndexed());
         }
 
         startBenchmark("insert");
-        box.put(entities);
+        boxIndexed.put(entities);
         stopBenchmark();
+        return entities;
+    }
+
+    private void runQueryById(boolean randomIds) {
+        List<SimpleEntity> entities = prepareAndPutEntities(false);
 
         long[] idsToLookup = new long[numberEntities];
         for (int i = 0; i < numberEntities; i++) {
