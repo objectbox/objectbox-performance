@@ -2,7 +2,6 @@ package io.objectbox.performanceapp;
 
 import android.content.Context;
 
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -63,9 +62,9 @@ public abstract class PerfTest {
     public void allTestsComplete() {
     }
 
-    protected void assertEntityCount(List list) {
-        if (list.size() != numberEntities) {
-            throw new IllegalStateException("Expected " + numberEntities + " but actual number is " + list.size());
+    protected void assertEntityCount(long size) {
+        if (size != numberEntities) {
+            throw new IllegalStateException("Expected " + numberEntities + " but actual number is " + size);
         }
     }
 

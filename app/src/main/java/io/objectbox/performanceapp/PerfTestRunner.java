@@ -95,7 +95,7 @@ public class PerfTestRunner {
             @Override
             public void run() {
                 if (error) {
-                    Spannable errorSpan = new SpannableString(text);
+                    Spannable errorSpan = new SpannableString(text.concat("\n"));
                     errorSpan.setSpan(new ForegroundColorSpan(Color.RED), 0, errorSpan.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     textViewResults.append(errorSpan);
                 } else {

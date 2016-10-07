@@ -97,7 +97,7 @@ public class ObjectBoxPerfTest extends PerfTest {
         List<SimpleEntity> reloaded = box.getAll();
         stopBenchmark();
 
-        assertEntityCount(reloaded);
+        assertEntityCount(reloaded.size());
 
 //        reloaded = null;
 //        startBenchmark("load2");
@@ -274,6 +274,8 @@ public class ObjectBoxPerfTest extends PerfTest {
         startBenchmark("insert");
         box.put(entities);
         stopBenchmark();
+
+        assertEntityCount(box.count());
         return entities;
     }
 
@@ -331,6 +333,9 @@ public class ObjectBoxPerfTest extends PerfTest {
         startBenchmark("insert");
         boxIndexed.put(entities);
         stopBenchmark();
+
+        assertEntityCount(boxIndexed.count());
+
         return entities;
     }
 
