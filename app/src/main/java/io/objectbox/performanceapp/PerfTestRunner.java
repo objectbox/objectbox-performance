@@ -1,7 +1,11 @@
 package io.objectbox.performanceapp;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Environment;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -57,7 +61,7 @@ public class PerfTestRunner {
                             try {
                                 PerfTestRunner.this.run(type, test);
                             } catch (Exception e) {
-                                log("Aborted because of " + e.getMessage());
+                                logError("Aborted because of " + e.getMessage());
                                 Log.e("PERF", "Error while running tests", e);
                             }
                         }
@@ -77,12 +81,26 @@ public class PerfTestRunner {
     }
 
     public void log(final String text) {
+        log(text, false);
+    }
+
+    public void logError(final String text) {
+        log(text, true);
+    }
+
+    private void log(final String text, final boolean error) {
         Log.d("PERF", text);
         final CountDownLatch joinLatch = new CountDownLatch(1);
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                textViewResults.append(text.concat("\n"));
+                if (error) {
+                    Spannable errorSpan = new SpannableString(text);
+                    errorSpan.setSpan(new ForegroundColorSpan(Color.RED), 0, errorSpan.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    textViewResults.append(errorSpan);
+                } else {
+                    textViewResults.append(text.concat("\n"));
+                }
                 // post so just appended text is visible
                 if (scrollViewResults != null) {
                     textViewResults.post(new Runnable() {

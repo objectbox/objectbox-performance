@@ -35,7 +35,7 @@ public class ObjectBoxPerfTest extends PerfTest {
         if (!versionLoggedOnce) {
             String versionNative = BoxStore.getVersionNative();
             String versionJava = BoxStore.getVersion();
-            if (versionJava != null && versionJava.equals(versionJava)) {
+            if (versionJava != null && versionJava.equals(versionNative)) {
                 log("ObjectBox " + versionNative);
             } else {
                 log("ObjectBox " + versionNative + " (Java: " + versionJava + ")");
@@ -96,6 +96,8 @@ public class ObjectBoxPerfTest extends PerfTest {
         startBenchmark("load");
         List<SimpleEntity> reloaded = box.getAll();
         stopBenchmark();
+
+        assertEntityCount(reloaded);
 
 //        reloaded = null;
 //        startBenchmark("load2");
@@ -260,6 +262,7 @@ public class ObjectBoxPerfTest extends PerfTest {
         }
         stopBenchmark();
         log("Entities found: " + entitiesFound);
+        assertGreaterOrEqualToNumberOfEntities(entitiesFound);
     }
 
     private List<SimpleEntity> prepareAndPutEntities(boolean scalarsOnly) {
@@ -296,6 +299,7 @@ public class ObjectBoxPerfTest extends PerfTest {
         }
         stopBenchmark();
         log("Entities found: " + entitiesFound);
+        assertGreaterOrEqualToNumberOfEntities(entitiesFound);
     }
 
     private void runQueryByIntegerIndexed() {
@@ -315,6 +319,7 @@ public class ObjectBoxPerfTest extends PerfTest {
         }
         stopBenchmark();
         log("Entities found: " + entitiesFound);
+        assertGreaterOrEqualToNumberOfEntities(entitiesFound);
     }
 
     private List<SimpleEntityIndexed> prepareAndPutEntitiesIndexed() {
