@@ -3,7 +3,6 @@ package io.objectbox.performanceapp.objectbox;
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Generated;
 import io.objectbox.annotation.Id;
-import io.objectbox.annotation.NotNull;
 
 @Entity
 public class SimpleEntity {
@@ -108,21 +107,19 @@ public class SimpleEntity {
         this.simpleDouble = simpleDouble;
     }
 
-    @NotNull
     public String getSimpleString() {
         return simpleString;
     }
 
-    public void setSimpleString(@NotNull String simpleString) {
+    public void setSimpleString(String simpleString) {
         this.simpleString = simpleString;
     }
 
-    @NotNull
     public byte[] getSimpleByteArray() {
         return simpleByteArray;
     }
 
-    public void setSimpleByteArray(@NotNull byte[] simpleByteArray) {
+    public void setSimpleByteArray(byte[] simpleByteArray) {
         this.simpleByteArray = simpleByteArray;
     }
 

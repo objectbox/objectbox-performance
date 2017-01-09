@@ -230,7 +230,7 @@ public class ObjectBoxPerfTest extends PerfTest {
 
         startBenchmark("query");
 
-        final int propertyId = box.getPropertyId(SimpleEntityProperties.SimpleString.dbName);
+        final int propertyId = box.getPropertyId(SimpleEntity_.simpleString.dbName);
         long entitiesFound = 0;
         for (int i = 0; i < numberEntities; i++) {
             List<SimpleEntity> result = box.find(propertyId, stringsToLookup[i]);
@@ -253,7 +253,7 @@ public class ObjectBoxPerfTest extends PerfTest {
         }
 
         startBenchmark("query");
-        final int propertyId = box.getPropertyId(SimpleEntityProperties.SimpleInt.dbName);
+        final int propertyId = box.getPropertyId(SimpleEntity_.simpleInt.dbName);
         long entitiesFound = 0;
         for (int i = 0; i < numberEntities; i++) {
             List<SimpleEntity> result = box.find(propertyId, valuesToLookup[i]);
@@ -292,7 +292,7 @@ public class ObjectBoxPerfTest extends PerfTest {
         }
 
         startBenchmark("query");
-        final int propertyId = boxIndexed.getPropertyId(SimpleEntityIndexedProperties.SimpleString.dbName);
+        final int propertyId = boxIndexed.getPropertyId(SimpleEntityIndexed_.simpleString.dbName);
         long entitiesFound = 0;
         for (int i = 0; i < numberEntities; i++) {
             List<SimpleEntityIndexed> result = boxIndexed.find(propertyId, stringsToLookup[i]);
@@ -312,7 +312,7 @@ public class ObjectBoxPerfTest extends PerfTest {
         }
 
         startBenchmark("query");
-        final int propertyId = box.getPropertyId(SimpleEntityIndexedProperties.SimpleInt.dbName);
+        final int propertyId = box.getPropertyId(SimpleEntityIndexed_.simpleInt.dbName);
         long entitiesFound = 0;
         for (int i = 0; i < numberEntities; i++) {
             List<SimpleEntityIndexed> result = boxIndexed.find(propertyId, valuesToLookup[i]);

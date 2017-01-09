@@ -1,0 +1,132 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": 1,
+      "lastPropertyId": 10,
+      "name": "SimpleEntity",
+      "properties": [
+        {
+          "id": 1,
+          "name": "id",
+          "refId": 2237410447194254073
+        },
+        {
+          "id": 2,
+          "name": "simpleBoolean",
+          "refId": 4886638069880685247
+        },
+        {
+          "id": 3,
+          "name": "simpleByte",
+          "refId": 5503700777275470438
+        },
+        {
+          "id": 4,
+          "name": "simpleShort",
+          "refId": 3124006486540376431
+        },
+        {
+          "id": 5,
+          "name": "simpleInt",
+          "refId": 1396531336909078472
+        },
+        {
+          "id": 6,
+          "name": "simpleLong",
+          "refId": 4677353244575414005
+        },
+        {
+          "id": 7,
+          "name": "simpleFloat",
+          "refId": 6066479338585674482
+        },
+        {
+          "id": 8,
+          "name": "simpleDouble",
+          "refId": 2841114440348462179
+        },
+        {
+          "id": 9,
+          "name": "simpleString",
+          "refId": 4480937823789023345
+        },
+        {
+          "id": 10,
+          "name": "simpleByteArray",
+          "refId": 517885675153371641
+        }
+      ],
+      "refId": 7516727758079631503
+    },
+    {
+      "id": 2,
+      "lastPropertyId": 10,
+      "name": "SimpleEntityIndexed",
+      "properties": [
+        {
+          "id": 1,
+          "name": "id",
+          "refId": 6619185384001787156
+        },
+        {
+          "id": 2,
+          "name": "simpleBoolean",
+          "refId": 7301352372504313155
+        },
+        {
+          "id": 3,
+          "name": "simpleByte",
+          "refId": 8600871076689266795
+        },
+        {
+          "id": 4,
+          "name": "simpleShort",
+          "refId": 8988292475728440514
+        },
+        {
+          "id": 5,
+          "indexId": 1,
+          "name": "simpleInt",
+          "refId": 2921625568040263893
+        },
+        {
+          "id": 6,
+          "name": "simpleLong",
+          "refId": 19303394372526165
+        },
+        {
+          "id": 7,
+          "name": "simpleFloat",
+          "refId": 6495172165899435986
+        },
+        {
+          "id": 8,
+          "name": "simpleDouble",
+          "refId": 4867684093796249349
+        },
+        {
+          "id": 9,
+          "indexId": 2,
+          "name": "simpleString",
+          "refId": 6338885538467298631
+        },
+        {
+          "id": 10,
+          "name": "simpleByteArray",
+          "refId": 5226619774597064447
+        }
+      ],
+      "refId": 2870272152805062724
+    }
+  ],
+  "lastEntityId": 2,
+  "lastIndexId": 2,
+  "lastSequenceId": 0,
+  "metaVersion": 1,
+  "retiredEntityRefIds": [],
+  "retiredPropertyRefIds": [],
+  "version": 1
+}
