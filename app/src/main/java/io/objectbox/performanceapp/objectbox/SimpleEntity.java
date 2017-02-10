@@ -8,18 +8,18 @@ import io.objectbox.annotation.Id;
 public class SimpleEntity {
 
     @Id
-    private long id;
-    private boolean simpleBoolean;
-    private byte simpleByte;
-    private short simpleShort;
-    private int simpleInt;
-    private long simpleLong;
-    private float simpleFloat;
-    private double simpleDouble;
+    long id;
+    boolean simpleBoolean;
+    byte simpleByte;
+    short simpleShort;
+    int simpleInt;
+    long simpleLong;
+    float simpleFloat;
+    double simpleDouble;
 
-    private String simpleString;
+    String simpleString;
     
-    private byte[] simpleByteArray;
+    byte[] simpleByteArray;
 
     @Generated(hash = 1682830787)
     public SimpleEntity() {
