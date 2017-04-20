@@ -137,11 +137,12 @@ public class Benchmark {
     }
 
     /**
-     * Try to give GC some time to settle down.
+     * Try to give GC & finalization some time to settle down.
      */
     public void prepareForNextRun() {
         for (int i = 0; i < 5; i++) {
             System.gc();
+            System.runFinalization();
             try {
                 Thread.sleep(20);
             } catch (InterruptedException e) {
