@@ -35,7 +35,7 @@ public class ObjectBoxPerfTest extends PerfTest {
         if (!versionLoggedOnce) {
             String versionNative = BoxStore.getVersionNative();
             String versionJava = BoxStore.getVersion();
-            if (versionJava != null && versionJava.equals(versionNative)) {
+            if (versionJava.equals(versionNative)) {
                 log("ObjectBox " + versionNative);
             } else {
                 log("ObjectBox " + versionNative + " (Java: " + versionJava + ")");
@@ -230,7 +230,7 @@ public class ObjectBoxPerfTest extends PerfTest {
 
         startBenchmark("query");
 
-        final int propertyId = box.getPropertyId(SimpleEntity_.simpleString.dbName);
+        final int propertyId = SimpleEntity_.simpleString.getId();
         long entitiesFound = 0;
         for (int i = 0; i < numberEntities; i++) {
             List<SimpleEntity> result = box.find(propertyId, stringsToLookup[i]);
@@ -253,7 +253,7 @@ public class ObjectBoxPerfTest extends PerfTest {
         }
 
         startBenchmark("query");
-        final int propertyId = box.getPropertyId(SimpleEntity_.simpleInt.dbName);
+        final int propertyId = SimpleEntity_.simpleInt.getId();
         long entitiesFound = 0;
         for (int i = 0; i < numberEntities; i++) {
             List<SimpleEntity> result = box.find(propertyId, valuesToLookup[i]);
@@ -292,7 +292,7 @@ public class ObjectBoxPerfTest extends PerfTest {
         }
 
         startBenchmark("query");
-        final int propertyId = boxIndexed.getPropertyId(SimpleEntityIndexed_.simpleString.dbName);
+        final int propertyId = SimpleEntityIndexed_.simpleString.getId();
         long entitiesFound = 0;
         for (int i = 0; i < numberEntities; i++) {
             List<SimpleEntityIndexed> result = boxIndexed.find(propertyId, stringsToLookup[i]);
@@ -312,7 +312,7 @@ public class ObjectBoxPerfTest extends PerfTest {
         }
 
         startBenchmark("query");
-        final int propertyId = box.getPropertyId(SimpleEntityIndexed_.simpleInt.dbName);
+        final int propertyId = SimpleEntityIndexed_.simpleInt.getId();
         long entitiesFound = 0;
         for (int i = 0; i < numberEntities; i++) {
             List<SimpleEntityIndexed> result = boxIndexed.find(propertyId, valuesToLookup[i]);
