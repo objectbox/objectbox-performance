@@ -312,6 +312,8 @@ public class GreendaoPerfTest extends PerfTest {
         dao.insertInTx(entities);
         stopBenchmark();
 
+        assertEntityCount(dao.count());
+
         long[] idsToLookup = new long[numberEntities];
         for (int i = 0; i < numberEntities; i++) {
             idsToLookup[i] = randomIds ? random.nextInt(numberEntities) : i;
