@@ -69,10 +69,10 @@ public class ObjectBoxPerfTest extends PerfTest {
                 runQueryByIntegerIndexed();
                 break;
             case TestType.QUERY_ID:
-                runQueryById(false);
+                runQueryById(false, false);
                 break;
             case TestType.QUERY_ID_RANDOM:
-                runQueryById(true);
+                runQueryById(true, false);
                 break;
         }
     }
@@ -99,10 +99,10 @@ public class ObjectBoxPerfTest extends PerfTest {
 
         assertEntityCount(reloaded.size());
 
-//        reloaded = null;
-//        startBenchmark("load2");
-//        reloaded = box.getAll2();
-//        stopBenchmark();
+        //        reloaded = null;
+        //        startBenchmark("load2");
+        //        reloaded = box.getAll2();
+        //        stopBenchmark();
 
         startBenchmark("access");
         accessAll(reloaded);
@@ -339,20 +339,33 @@ public class ObjectBoxPerfTest extends PerfTest {
         return entities;
     }
 
-    private void runQueryById(boolean randomIds) {
+    private void runQueryById(boolean randomIds, boolean inReadTx) {
         List<SimpleEntity> entities = prepareAndPutEntities(false);
 
-        long[] idsToLookup = new long[numberEntities];
+        final long[] idsToLookup = new long[numberEntities];
         for (int i = 0; i < numberEntities; i++) {
             idsToLookup[i] = randomIds ? 1 + random.nextInt(numberEntities) : 1 + i;
         }
 
         startBenchmark("query");
+        if(inReadTx) {
+            store.runInReadTx(new Runnable() {
+                @Override
+                public void run() {
+                    getById(idsToLookup);
+                }
+            });
+        } else {
+            getById(idsToLookup);
+        }
+        stopBenchmark();
+    }
+
+    private void getById(long[] idsToLookup) {
         for (int i = 0; i < numberEntities; i++) {
             SimpleEntity entity = box.get(idsToLookup[i]);
             accessAll(entity);
         }
-        stopBenchmark();
     }
 
     private void accessAll(SimpleEntity entity) {
