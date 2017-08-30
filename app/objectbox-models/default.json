@@ -48,7 +48,8 @@
           "id": "10:8979168811650087844",
           "name": "simpleByteArray"
         }
-      ]
+      ],
+      "relations": []
     },
     {
       "id": "2:1960446593108937414",
@@ -97,15 +98,18 @@
           "id": "10:7622112042154959206",
           "name": "simpleByteArray"
         }
-      ]
+      ],
+      "relations": []
     }
   ],
   "lastEntityId": "2:1960446593108937414",
   "lastIndexId": "2:2825443978184014074",
+  "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
-  "modelVersion": 2,
+  "modelVersion": 3,
   "retiredEntityUids": [],
   "retiredIndexUids": [],
   "retiredPropertyUids": [],
+  "retiredRelationUids": [],
   "version": 1
 }
