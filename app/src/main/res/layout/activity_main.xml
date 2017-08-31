@@ -41,8 +41,17 @@
         android:layout_marginLeft="16dp"
         android:layout_toEndOf="@+id/checkBoxRealm"
         android:layout_toRightOf="@+id/checkBoxRealm"
-        android:text="SQLite"/>
+        android:text="SQL/ORM"/>
 
+    <TextView
+        android:id="@+id/textViewNote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/checkBoxSQLite"
+        android:layout_marginTop="8dp"
+        android:text="Note: for better results, check only one at a time"/>
 
     <Spinner
         android:id="@+id/spinnerTestType"
@@ -50,8 +59,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/checkBoxObjectBox"
-        android:layout_marginTop="8dp"/>
+        android:layout_below="@+id/textViewNote"
+        android:layout_marginTop="16dp"/>
 
 
     <TextView
@@ -88,7 +97,7 @@
         android:layout_toRightOf="@+id/editTextRuns"
         android:ems="10"
         android:inputType="number"
-        android:text="10000"/>
+        android:text="100000"/>
 
     <Button
         android:id="@+id/buttonRunTest"
