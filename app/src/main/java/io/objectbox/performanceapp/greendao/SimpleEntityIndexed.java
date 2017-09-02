@@ -15,6 +15,8 @@ public class SimpleEntityIndexed {
     private boolean simpleBoolean;
     private byte simpleByte;
     private short simpleShort;
+
+    @Index
     private int simpleInt;
     private long simpleLong;
     private float simpleFloat;
