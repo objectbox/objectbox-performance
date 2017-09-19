@@ -136,6 +136,7 @@
             android:id="@+id/textViewResults"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textIsSelectable="true"
             tools:text="Logging" />
     </ScrollView>
 
