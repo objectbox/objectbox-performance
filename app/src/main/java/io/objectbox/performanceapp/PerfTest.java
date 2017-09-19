@@ -17,12 +17,10 @@
 package io.objectbox.performanceapp;
 
 import android.content.Context;
+import android.support.annotation.CallSuper;
 
 import java.util.Random;
 
-/**
- * Created by Markus on 01.10.2016.
- */
 public abstract class PerfTest {
 
     protected Random random;
@@ -31,6 +29,7 @@ public abstract class PerfTest {
     protected int numberEntities;
     protected Benchmark benchmark;
 
+    @CallSuper
     public void setUp(Context context, PerfTestRunner testRunner) {
         random = new Random();
         this.context = context.getApplicationContext();

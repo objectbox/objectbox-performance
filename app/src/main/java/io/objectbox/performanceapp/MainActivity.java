@@ -36,6 +36,7 @@ import io.objectbox.performanceapp.PerfTestRunner.Callback;
 import io.objectbox.performanceapp.greendao.GreendaoPerfTest;
 import io.objectbox.performanceapp.objectbox.ObjectBoxPerfTest;
 import io.objectbox.performanceapp.realm.RealmPerfTest;
+import io.objectbox.performanceapp.room.RoomPerfTest;
 
 public class MainActivity extends Activity implements Callback {
     private TextView textViewResults;
@@ -54,12 +55,15 @@ public class MainActivity extends Activity implements Callback {
                 View currentFocus = MainActivity.this.getCurrentFocus();
                 if (currentFocus != null) {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(currentFocus.getWindowToken(), 0);
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(currentFocus.getWindowToken(), 0);
+                    }
                     currentFocus.clearFocus();
                 }
                 boolean objectBox = ((CheckBox) findViewById(R.id.checkBoxObjectBox)).isChecked();
                 boolean realm = ((CheckBox) findViewById(R.id.checkBoxRealm)).isChecked();
-                boolean sqlite = ((CheckBox) findViewById(R.id.checkBoxSQLite)).isChecked();
+                boolean greenDao = ((CheckBox) findViewById(R.id.checkBoxGreenDao)).isChecked();
+                boolean room = ((CheckBox) findViewById(R.id.checkBoxRoom)).isChecked();
                 TestType type = (TestType) ((Spinner) findViewById(R.id.spinnerTestType)).getSelectedItem();
 
                 int runs;
@@ -72,10 +76,10 @@ public class MainActivity extends Activity implements Callback {
                     textViewResults.append(e.getMessage() + "\n");
                     return;
                 }
-                runTests(type, runs, numberEntities, objectBox, realm, sqlite);
+                runTests(type, runs, numberEntities, objectBox, realm, greenDao, room);
             }
         });
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, TestType.ALL);
+        ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, TestType.ALL);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ((Spinner) findViewById(R.id.spinnerTestType)).setAdapter(adapter);
         textViewResults = ((TextView) findViewById(R.id.textViewResults));
@@ -90,7 +94,7 @@ public class MainActivity extends Activity implements Callback {
         super.onDestroy();
     }
 
-    private void runTests(TestType type, int runs, int numberEntities, boolean objectBox, boolean realm, boolean sqlite) {
+    private void runTests(TestType type, int runs, int numberEntities, boolean objectBox, boolean realm, boolean greenDao, boolean room) {
         textViewResults.setText("");
         List<PerfTest> tests = new ArrayList<>();
         if (objectBox) {
@@ -99,8 +103,11 @@ public class MainActivity extends Activity implements Callback {
         if (realm) {
             tests.add(new RealmPerfTest());
         }
-        if (sqlite) {
+        if (greenDao) {
             tests.add(new GreendaoPerfTest());
+        }
+        if (room) {
+            tests.add(new RoomPerfTest());
         }
         testRunner = new PerfTestRunner(this, this, textViewResults, runs, numberEntities);
         testRunner.run(type, tests);

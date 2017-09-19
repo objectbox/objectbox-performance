@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    android:id="@+id/activity_main"
+<RelativeLayout android:id="@+id/activity_main"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,7 +10,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="io.objectbox.performanceapp.MainActivity">
+    tools:context="io.objectbox.performanceapp.MainActivity"
+    tools:ignore="HardcodedText">
 
     <CheckBox
         android:id="@+id/checkBoxObjectBox"
@@ -21,7 +21,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:checked="true"
-        android:text="ObjectBox"/>
+        android:text="ObjectBox" />
 
     <CheckBox
         android:id="@+id/checkBoxRealm"
@@ -29,19 +29,30 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/checkBoxObjectBox"
         android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
         android:layout_toEndOf="@+id/checkBoxObjectBox"
         android:layout_toRightOf="@+id/checkBoxObjectBox"
-        android:text="Realm"/>
+        android:text="Realm" />
 
     <CheckBox
-        android:id="@+id/checkBoxSQLite"
+        android:id="@+id/checkBoxGreenDao"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/checkBoxObjectBox"
+        android:text="greenDAO" />
+
+    <CheckBox
+        android:id="@+id/checkBoxRoom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/checkBoxObjectBox"
         android:layout_marginLeft="16dp"
-        android:layout_toEndOf="@+id/checkBoxRealm"
-        android:layout_toRightOf="@+id/checkBoxRealm"
-        android:text="SQL/ORM"/>
+        android:layout_marginStart="16dp"
+        android:layout_toEndOf="@+id/checkBoxGreenDao"
+        android:layout_toRightOf="@+id/checkBoxGreenDao"
+        android:text="Room" />
 
     <TextView
         android:id="@+id/textViewNote"
@@ -49,9 +60,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/checkBoxSQLite"
+        android:layout_below="@+id/checkBoxRoom"
         android:layout_marginTop="8dp"
-        android:text="Note: for better results, check only one at a time"/>
+        android:text="Note: for better results, check only one at a time" />
 
     <Spinner
         android:id="@+id/spinnerTestType"
@@ -60,7 +71,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/textViewNote"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="16dp" />
 
 
     <TextView
@@ -71,7 +82,7 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/spinnerTestType"
         android:layout_marginTop="8dp"
-        android:text="Test Runs / Number of Entities:"/>
+        android:text="Test Runs / Number of Entities:" />
 
 
     <EditText
@@ -83,7 +94,7 @@
         android:layout_below="@+id/textViewRuns"
         android:ems="10"
         android:inputType="number"
-        android:text="1"/>
+        android:text="1" />
 
 
     <EditText
@@ -97,7 +108,7 @@
         android:layout_toRightOf="@+id/editTextRuns"
         android:ems="10"
         android:inputType="number"
-        android:text="100000"/>
+        android:text="100000" />
 
     <Button
         android:id="@+id/buttonRunTest"
@@ -109,7 +120,7 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/editTextRuns"
         android:layout_marginTop="16dp"
-        android:text="Run Test(s)"/>
+        android:text="Run Test(s)" />
 
     <!-- ScrollView allows nicer scrolling with fling vs. TextView only -->
     <ScrollView
@@ -124,8 +135,9 @@
         <TextView
             android:id="@+id/textViewResults"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:text="Logging"/>
+            android:layout_height="wrap_content"
+            android:textIsSelectable="true"
+            tools:text="Logging" />
     </ScrollView>
 
 
