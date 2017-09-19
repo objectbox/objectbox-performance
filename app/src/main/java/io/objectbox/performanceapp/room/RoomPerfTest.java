@@ -64,12 +64,12 @@ public class RoomPerfTest extends PerfTest {
             case TestType.CRUD_INDEXED:
                 runBatchPerfTestIndexed();
                 break;
-//            case TestType.QUERY_STRING:
-//                runQueryByString();
-//                break;
-//            case TestType.QUERY_STRING_INDEXED:
-//                runQueryByStringIndexed();
-//                break;
+            case TestType.QUERY_STRING:
+                runQueryByString();
+                break;
+            case TestType.QUERY_STRING_INDEXED:
+                runQueryByStringIndexed();
+                break;
 //            case TestType.QUERY_INTEGER:
 //                runQueryByInteger();
 //                break;
@@ -151,6 +151,74 @@ public class RoomPerfTest extends PerfTest {
         startBenchmark("delete");
         daoIndexed.deleteInTx(reloaded);
         stopBenchmark();
+    }
+
+    private void runQueryByString() {
+        if (numberEntities > 10000) {
+            log("Reduce number of entities to 10000 to avoid extremely long test runs");
+            return;
+        }
+        List<SimpleEntity> entities = new ArrayList<>(numberEntities);
+        for (int i = 0; i < numberEntities; i++) {
+            entities.add(createEntity((long) i, false));
+        }
+
+        startBenchmark("insert");
+        dao.insertInTx(entities);
+        stopBenchmark();
+
+        String[] stringsToLookup = new String[numberEntities];
+        for (int i = 0; i < numberEntities; i++) {
+            String text = "";
+            while (text.length() < 2) {
+                text = entities.get(random.nextInt(numberEntities)).getSimpleString();
+            }
+            stringsToLookup[i] = text;
+        }
+
+        long entitiesFound = 0;
+        startBenchmark("query");
+        db.beginTransaction();
+        for (int i = 0; i < numberEntities; i++) {
+            List<SimpleEntity> result = dao.whereSimpleStringEq(stringsToLookup[i]);
+            accessAll(result);
+            entitiesFound += result.size();
+        }
+        db.endTransaction();
+        stopBenchmark();
+        log("Entities found: " + entitiesFound);
+    }
+
+    private void runQueryByStringIndexed() {
+        List<SimpleEntityIndexed> entities = new ArrayList<>(numberEntities);
+        for (int i = 0; i < numberEntities; i++) {
+            entities.add(createEntityIndexed((long) i));
+        }
+
+        startBenchmark("insert");
+        daoIndexed.insertInTx(entities);
+        stopBenchmark();
+
+        String[] stringsToLookup = new String[numberEntities];
+        for (int i = 0; i < numberEntities; i++) {
+            String text = "";
+            while (text.length() < 2) {
+                text = entities.get(random.nextInt(numberEntities)).getSimpleString();
+            }
+            stringsToLookup[i] = text;
+        }
+
+        long entitiesFound = 0;
+        startBenchmark("query");
+        db.beginTransaction();
+        for (int i = 0; i < numberEntities; i++) {
+            List<SimpleEntityIndexed> result = daoIndexed.whereSimpleStringEq(stringsToLookup[i]);
+            accessAllIndexed(result);
+            entitiesFound += result.size();
+        }
+        db.endTransaction();
+        stopBenchmark();
+        log("Entities found: " + entitiesFound);
     }
 
     @Override
