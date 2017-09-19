@@ -76,12 +76,12 @@ public class RoomPerfTest extends PerfTest {
 //            case TestType.QUERY_INTEGER_INDEXED:
 //                runQueryByIntegerIndexed();
 //                break;
-//            case TestType.QUERY_ID:
-//                runQueryById(false, false);
-//                break;
-//            case TestType.QUERY_ID_RANDOM:
-//                runQueryById(true, false);
-//                break;
+            case TestType.QUERY_ID:
+                runQueryById(false);
+                break;
+            case TestType.QUERY_ID_RANDOM:
+                runQueryById(true);
+                break;
         }
     }
 
@@ -121,7 +121,7 @@ public class RoomPerfTest extends PerfTest {
         stopBenchmark();
     }
 
-    public void runBatchPerfTestIndexed() {
+    private void runBatchPerfTestIndexed() {
         List<SimpleEntityIndexed> list = new ArrayList<>(numberEntities);
         for (int i = 0; i < numberEntities; i++) {
             list.add(createEntityIndexed((long) i));
@@ -221,12 +221,51 @@ public class RoomPerfTest extends PerfTest {
         log("Entities found: " + entitiesFound);
     }
 
+    private void runQueryById(boolean randomIds) {
+        List<SimpleEntity> entities = new ArrayList<>(numberEntities);
+        for (int i = 0; i < numberEntities; i++) {
+            entities.add(createEntity((long) i, false));
+        }
+
+        startBenchmark("insert");
+        dao.insertInTx(entities);
+        stopBenchmark();
+
+        assertEntityCount(dao.count());
+
+        long[] idsToLookup = new long[numberEntities];
+        for (int i = 0; i < numberEntities; i++) {
+            idsToLookup[i] = randomIds ? random.nextInt(numberEntities) : i;
+        }
+
+        startBenchmark("query");
+        for (int i = 0; i < numberEntities; i++) {
+            SimpleEntity entity = dao.load(idsToLookup[i]);
+            accessAll(entity);
+        }
+        stopBenchmark();
+    }
+
     @Override
     public void tearDown() {
         super.tearDown();
         db.close();
         boolean deleted = context.deleteDatabase(DB_NAME);
         log("DB deleted: " + deleted);
+    }
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    private void accessAll(SimpleEntity entity) {
+        entity.getId();
+        entity.getSimpleBoolean();
+        entity.getSimpleByte();
+        entity.getSimpleShort();
+        entity.getSimpleInt();
+        entity.getSimpleLong();
+        entity.getSimpleFloat();
+        entity.getSimpleDouble();
+        entity.getSimpleString();
+        entity.getSimpleByteArray();
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
