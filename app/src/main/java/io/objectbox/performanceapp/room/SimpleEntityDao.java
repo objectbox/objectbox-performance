@@ -26,6 +26,9 @@ public interface SimpleEntityDao {
     @Delete
     void deleteInTx(List<SimpleEntity> entities);
 
+    @Query("SELECT * from simpleentity where simpleInt = :value")
+    List<SimpleEntity> whereSimpleIntEq(int value);
+
     @Query("SELECT * FROM simpleentity WHERE simpleString = :value")
     List<SimpleEntity> whereSimpleStringEq(String value);
 
