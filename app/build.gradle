@@ -16,7 +16,7 @@ apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+
     defaultConfig {
         applicationId "io.objectbox.performanceapp"
         minSdkVersion 15
@@ -45,9 +45,9 @@ android {
 }
 
 dependencies {
-    compile "android.arch.persistence.room:runtime:1.0.0"
+    implementation "android.arch.persistence.room:runtime:1.0.0"
     annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
-    compile "io.objectbox:objectbox-android:$objectboxVersion"
-    compile 'org.greenrobot:greendao:3.2.2'
-    compile 'org.greenrobot:essentials:3.0.0-RC1'
+    implementation "io.objectbox:objectbox-android:$objectboxVersion"
+    implementation 'org.greenrobot:greendao:3.2.2'
+    implementation 'org.greenrobot:essentials:3.0.0-RC1'
 }
