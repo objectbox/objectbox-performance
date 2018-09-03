@@ -246,10 +246,9 @@ public class ObjectBoxPerfTest extends PerfTest {
 
         startBenchmark("query");
 
-        final int propertyId = SimpleEntity_.simpleString.getId();
         long entitiesFound = 0;
         for (int i = 0; i < numberEntities; i++) {
-            List<SimpleEntity> result = box.find(propertyId, stringsToLookup[i]);
+            List<SimpleEntity> result = box.find(SimpleEntity_.simpleString, stringsToLookup[i]);
             accessAll(result);
             entitiesFound += result.size();
         }
@@ -269,10 +268,9 @@ public class ObjectBoxPerfTest extends PerfTest {
         }
 
         startBenchmark("query");
-        final int propertyId = SimpleEntity_.simpleInt.getId();
         long entitiesFound = 0;
         for (int i = 0; i < numberEntities; i++) {
-            List<SimpleEntity> result = box.find(propertyId, valuesToLookup[i]);
+            List<SimpleEntity> result = box.find(SimpleEntity_.simpleInt, valuesToLookup[i]);
             accessAll(result);
             entitiesFound += result.size();
         }
@@ -308,10 +306,9 @@ public class ObjectBoxPerfTest extends PerfTest {
         }
 
         startBenchmark("query");
-        final int propertyId = SimpleEntityIndexed_.simpleString.getId();
         long entitiesFound = 0;
         for (int i = 0; i < numberEntities; i++) {
-            List<SimpleEntityIndexed> result = boxIndexed.find(propertyId, stringsToLookup[i]);
+            List<SimpleEntityIndexed> result = boxIndexed.find(SimpleEntityIndexed_.simpleString, stringsToLookup[i]);
             accessAllIndexed(result);
             entitiesFound += result.size();
         }
@@ -328,10 +325,9 @@ public class ObjectBoxPerfTest extends PerfTest {
         }
 
         startBenchmark("query");
-        final int propertyId = SimpleEntityIndexed_.simpleInt.getId();
         long entitiesFound = 0;
         for (int i = 0; i < numberEntities; i++) {
-            List<SimpleEntityIndexed> result = boxIndexed.find(propertyId, valuesToLookup[i]);
+            List<SimpleEntityIndexed> result = boxIndexed.find(SimpleEntityIndexed_.simpleInt, valuesToLookup[i]);
             accessAllIndexed(result);
             entitiesFound += result.size();
         }

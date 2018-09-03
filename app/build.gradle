@@ -1,12 +1,11 @@
 buildscript {
-    ext.objectboxVersion = '1.0.0'
+    ext.objectboxVersion = '2.1.0'
     repositories {
         jcenter()
-        maven { url "http://objectbox.net/beta-repo/" }
     }
     dependencies {
         classpath "io.objectbox:objectbox-gradle-plugin:$objectboxVersion"
-        classpath 'io.realm:realm-gradle-plugin:3.5.0'
+        classpath 'io.realm:realm-gradle-plugin:5.4.1'
     }
 }
 
@@ -45,8 +44,8 @@ android {
 }
 
 dependencies {
-    implementation "android.arch.persistence.room:runtime:1.0.0"
-    annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
+    implementation "android.arch.persistence.room:runtime:1.1.1"
+    annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
     implementation "io.objectbox:objectbox-android:$objectboxVersion"
     implementation 'org.greenrobot:greendao:3.2.2'
     implementation 'org.greenrobot:essentials:3.0.0-RC1'
