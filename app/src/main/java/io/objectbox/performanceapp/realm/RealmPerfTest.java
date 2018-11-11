@@ -72,6 +72,12 @@ public class RealmPerfTest extends PerfTest {
             case TestType.QUERY_STRING_INDEXED:
                 runQueryByStringIndexed();
                 break;
+            case TestType.QUERY_INTEGER:
+                runQueryByInteger();
+                break;
+            case TestType.QUERY_INTEGER_INDEXED:
+                runQueryByIntegerIndexed();
+                break;
             case TestType.QUERY_ID:
                 runQueryById(false);
                 break;
@@ -297,6 +303,71 @@ public class RealmPerfTest extends PerfTest {
         for (int i = 0; i < numberEntities; i++) {
             List<SimpleEntityIndexed> result = realm.where(SimpleEntityIndexed.class).equalTo("simpleString", stringsToLookup[i]).findAll();
             accessAllIndexed(result);
+            entitiesFound += result.size();
+        }
+        stopBenchmark();
+        log("Entities found: " + entitiesFound);
+    }
+
+
+    private void runQueryByIntegerIndexed() {
+        if (numberEntities > 10000) {
+            log("Reduce number of entities to 10000 to avoid extremely long test runs");
+            return;
+        }
+        List<SimpleEntityIndexed> entities = new ArrayList<>(numberEntities);
+        for (int i = 0; i < numberEntities; i++) {
+            entities.add(createEntityIndexed(i));
+        }
+
+        startBenchmark("insert");
+        realm.beginTransaction();
+        realm.insert(entities);
+        realm.commitTransaction();
+        stopBenchmark();
+
+        final int[] valuesToLookup = new int[numberEntities];
+        for (int i = 0; i < numberEntities; i++) {
+            valuesToLookup[i] = entities.get(random.nextInt(numberEntities)).getSimpleInt();
+        }
+
+        startBenchmark("query");
+        long entitiesFound = 0;
+        for (int i = 0; i < numberEntities; i++) {
+            List<SimpleEntityIndexed> result = realm.where(SimpleEntityIndexed.class).equalTo("simpleInt", valuesToLookup[i]).findAll();
+            accessAllIndexed(result);
+            entitiesFound += result.size();
+        }
+        stopBenchmark();
+        log("Entities found: " + entitiesFound);
+    }
+
+    private void runQueryByInteger() {
+        if (numberEntities > 10000) {
+            log("Reduce number of entities to 10000 to avoid extremely long test runs");
+            return;
+        }
+        List<SimpleEntity> entities = new ArrayList<>(numberEntities);
+        for (int i = 0; i < numberEntities; i++) {
+            entities.add(createEntity(i, false));
+        }
+
+        startBenchmark("insert");
+        realm.beginTransaction();
+        realm.insert(entities);
+        realm.commitTransaction();
+        stopBenchmark();
+
+        final int[] valuesToLookup = new int[numberEntities];
+        for (int i = 0; i < numberEntities; i++) {
+            valuesToLookup[i] = entities.get(random.nextInt(numberEntities)).getSimpleInt();
+        }
+
+        startBenchmark("query");
+        long entitiesFound = 0;
+        for (int i = 0; i < numberEntities; i++) {
+            List<SimpleEntity> result = realm.where(SimpleEntity.class).equalTo("simpleInt", valuesToLookup[i]).findAll();
+            accessAll(result);
             entitiesFound += result.size();
         }
         stopBenchmark();
