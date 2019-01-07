@@ -1,0 +1,178 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "3440b72ef8e427f23f501299b3de69d9",
+    "entities": [
+      {
+        "tableName": "SimpleEntity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `simpleBoolean` INTEGER NOT NULL, `simpleByte` INTEGER NOT NULL, `simpleShort` INTEGER NOT NULL, `simpleInt` INTEGER NOT NULL, `simpleLong` INTEGER NOT NULL, `simpleFloat` REAL NOT NULL, `simpleDouble` REAL NOT NULL, `simpleString` TEXT, `simpleByteArray` BLOB, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "simpleBoolean",
+            "columnName": "simpleBoolean",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "simpleByte",
+            "columnName": "simpleByte",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "simpleShort",
+            "columnName": "simpleShort",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "simpleInt",
+            "columnName": "simpleInt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "simpleLong",
+            "columnName": "simpleLong",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "simpleFloat",
+            "columnName": "simpleFloat",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "simpleDouble",
+            "columnName": "simpleDouble",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "simpleString",
+            "columnName": "simpleString",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "simpleByteArray",
+            "columnName": "simpleByteArray",
+            "affinity": "BLOB",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "SimpleEntityIndexed",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `simpleBoolean` INTEGER NOT NULL, `simpleByte` INTEGER NOT NULL, `simpleShort` INTEGER NOT NULL, `simpleInt` INTEGER NOT NULL, `simpleLong` INTEGER NOT NULL, `simpleFloat` REAL NOT NULL, `simpleDouble` REAL NOT NULL, `simpleString` TEXT, `simpleByteArray` BLOB, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "simpleBoolean",
+            "columnName": "simpleBoolean",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "simpleByte",
+            "columnName": "simpleByte",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "simpleShort",
+            "columnName": "simpleShort",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "simpleInt",
+            "columnName": "simpleInt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "simpleLong",
+            "columnName": "simpleLong",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "simpleFloat",
+            "columnName": "simpleFloat",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "simpleDouble",
+            "columnName": "simpleDouble",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "simpleString",
+            "columnName": "simpleString",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "simpleByteArray",
+            "columnName": "simpleByteArray",
+            "affinity": "BLOB",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_SimpleEntityIndexed_simpleInt",
+            "unique": false,
+            "columnNames": [
+              "simpleInt"
+            ],
+            "createSql": "CREATE  INDEX `index_SimpleEntityIndexed_simpleInt` ON `${TABLE_NAME}` (`simpleInt`)"
+          },
+          {
+            "name": "index_SimpleEntityIndexed_simpleString",
+            "unique": false,
+            "columnNames": [
+              "simpleString"
+            ],
+            "createSql": "CREATE  INDEX `index_SimpleEntityIndexed_simpleString` ON `${TABLE_NAME}` (`simpleString`)"
+          }
+        ],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"3440b72ef8e427f23f501299b3de69d9\")"
+    ]
+  }
+}
