@@ -26,6 +26,7 @@ import io.objectbox.BoxStore;
 import io.objectbox.performanceapp.PerfTest;
 import io.objectbox.performanceapp.PerfTestRunner;
 import io.objectbox.performanceapp.TestType;
+import io.objectbox.query.Query;
 
 public class ObjectBoxPerfTest extends PerfTest {
     private BoxStore store;
@@ -247,8 +248,13 @@ public class ObjectBoxPerfTest extends PerfTest {
         startBenchmark("query");
 
         long entitiesFound = 0;
+        Query<SimpleEntity> query = box.query()
+                .equal(SimpleEntity_.simpleString, "")
+                .parameterAlias("string")
+                .build();
         for (int i = 0; i < numberEntities; i++) {
-            List<SimpleEntity> result = box.find(SimpleEntity_.simpleString, stringsToLookup[i]);
+            query.setParameter("string", stringsToLookup[i]);
+            List<SimpleEntity> result = query.find();
             accessAll(result);
             entitiesFound += result.size();
         }
@@ -269,8 +275,13 @@ public class ObjectBoxPerfTest extends PerfTest {
 
         startBenchmark("query");
         long entitiesFound = 0;
+        Query<SimpleEntity> query = box.query()
+                .equal(SimpleEntity_.simpleInt, 0)
+                .parameterAlias("int")
+                .build();
         for (int i = 0; i < numberEntities; i++) {
-            List<SimpleEntity> result = box.find(SimpleEntity_.simpleInt, valuesToLookup[i]);
+            query.setParameter("int", valuesToLookup[i]);
+            List<SimpleEntity> result = query.find();
             accessAll(result);
             entitiesFound += result.size();
         }
@@ -307,8 +318,13 @@ public class ObjectBoxPerfTest extends PerfTest {
 
         startBenchmark("query");
         long entitiesFound = 0;
+        Query<SimpleEntityIndexed> query = boxIndexed.query()
+                .equal(SimpleEntityIndexed_.simpleString, "")
+                .parameterAlias("string")
+                .build();
         for (int i = 0; i < numberEntities; i++) {
-            List<SimpleEntityIndexed> result = boxIndexed.find(SimpleEntityIndexed_.simpleString, stringsToLookup[i]);
+            query.setParameter("string", stringsToLookup[i]);
+            List<SimpleEntityIndexed> result = query.find();
             accessAllIndexed(result);
             entitiesFound += result.size();
         }
@@ -326,8 +342,13 @@ public class ObjectBoxPerfTest extends PerfTest {
 
         startBenchmark("query");
         long entitiesFound = 0;
+        Query<SimpleEntityIndexed> query = boxIndexed.query()
+                .equal(SimpleEntityIndexed_.simpleInt, 0)
+                .parameterAlias("int")
+                .build();
         for (int i = 0; i < numberEntities; i++) {
-            List<SimpleEntityIndexed> result = boxIndexed.find(SimpleEntityIndexed_.simpleInt, valuesToLookup[i]);
+            query.setParameter("int", valuesToLookup[i]);
+            List<SimpleEntityIndexed> result = query.find();
             accessAllIndexed(result);
             entitiesFound += result.size();
         }
