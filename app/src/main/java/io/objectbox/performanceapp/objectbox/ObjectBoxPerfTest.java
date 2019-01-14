@@ -116,11 +116,6 @@ public class ObjectBoxPerfTest extends PerfTest {
 
         assertEntityCount(reloaded.size());
 
-        //        reloaded = null;
-        //        startBenchmark("load2");
-        //        reloaded = box.getAll2();
-        //        stopBenchmark();
-
         startBenchmark("access");
         accessAll(reloaded);
         stopBenchmark();
