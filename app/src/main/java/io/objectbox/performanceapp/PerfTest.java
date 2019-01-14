@@ -17,7 +17,7 @@
 package io.objectbox.performanceapp;
 
 import android.content.Context;
-import android.support.annotation.CallSuper;
+import androidx.annotation.CallSuper;
 
 import java.util.Random;
 
