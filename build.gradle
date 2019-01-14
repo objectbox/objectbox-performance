@@ -29,3 +29,9 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+task wrapper(type: Wrapper) {
+    group = "build setup"
+    //noinspection UnnecessaryQualifiedReference
+    distributionType = Wrapper.DistributionType.ALL
+}
