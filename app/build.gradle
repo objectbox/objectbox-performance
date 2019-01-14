@@ -7,7 +7,7 @@ buildscript {
     }
     dependencies {
         classpath "io.objectbox:objectbox-gradle-plugin:$objectboxVersion"
-        classpath 'io.realm:realm-gradle-plugin:5.4.1'
+        classpath 'io.realm:realm-gradle-plugin:5.8.0'
     }
 }
 
