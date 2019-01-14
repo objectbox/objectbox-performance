@@ -29,7 +29,7 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -58,8 +58,8 @@ android {
 }
 
 dependencies {
-    implementation "android.arch.persistence.room:runtime:1.1.1"
-    annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
+    implementation "androidx.room:room-runtime:2.0.0"
+    annotationProcessor "androidx.room:room-compiler:2.0.0"
     implementation "io.objectbox:objectbox-android:$objectboxVersion"
     implementation 'org.greenrobot:greendao:3.2.2'
     implementation 'org.greenrobot:essentials:3.0.0-RC1'
