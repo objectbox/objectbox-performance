@@ -45,7 +45,8 @@ public class ObjectBoxPerfTest extends PerfTest {
         store = MyObjectBox.builder().androidContext(context).build();
         store.close();
         store.deleteAllFiles();
-        store = MyObjectBox.builder().androidContext(context).maxSizeInKByte(200 * 1024).build();
+        // 2 GB for DB to allow putting millions of objects
+        store = MyObjectBox.builder().androidContext(context).maxSizeInKByte(2 * 1024 * 1024).build();
         box = store.boxFor(SimpleEntity.class);
         boxIndexed = store.boxFor(SimpleEntityIndexed.class);
 
@@ -290,6 +291,7 @@ public class ObjectBoxPerfTest extends PerfTest {
         for (int i = 0; i < numberEntities; i++) {
             entities.add(createEntity(scalarsOnly));
         }
+        log("Prepared test data: " + numberEntities + " objects");
 
         startBenchmark("insert");
         box.put(entities);
