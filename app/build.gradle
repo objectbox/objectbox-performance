@@ -1,5 +1,5 @@
 buildscript {
-    ext.objectboxVersion = '2.3.1'
+    ext.objectboxVersion = '2.4.0'
     repositories {
         google()
         mavenCentral()
@@ -7,7 +7,7 @@ buildscript {
     }
     dependencies {
         classpath "io.objectbox:objectbox-gradle-plugin:$objectboxVersion"
-        classpath 'io.realm:realm-gradle-plugin:5.8.0'
+        classpath 'io.realm:realm-gradle-plugin:6.0.0'
     }
 }
 
@@ -58,8 +58,8 @@ android {
 }
 
 dependencies {
-    implementation "androidx.room:room-runtime:2.0.0"
-    annotationProcessor "androidx.room:room-compiler:2.0.0"
+    implementation "androidx.room:room-runtime:2.2.0"
+    annotationProcessor "androidx.room:room-compiler:2.2.0"
     implementation "io.objectbox:objectbox-android:$objectboxVersion"
     implementation 'org.greenrobot:greendao:3.2.2'
     implementation 'org.greenrobot:essentials:3.0.0-RC1'

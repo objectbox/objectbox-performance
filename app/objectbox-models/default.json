@@ -10,43 +10,61 @@
       "properties": [
         {
           "id": "1:8357181620038296370",
-          "name": "id"
+          "name": "id",
+          "type": 6,
+          "flags": 1
         },
         {
           "id": "2:8014957599658721377",
-          "name": "simpleBoolean"
+          "name": "simpleBoolean",
+          "type": 1,
+          "flags": 4
         },
         {
           "id": "3:486615229902264705",
-          "name": "simpleByte"
+          "name": "simpleByte",
+          "type": 2,
+          "flags": 4
         },
         {
           "id": "4:6601224481371519086",
-          "name": "simpleShort"
+          "name": "simpleShort",
+          "type": 3,
+          "flags": 4
         },
         {
           "id": "5:2118306784392599510",
-          "name": "simpleInt"
+          "name": "simpleInt",
+          "type": 5,
+          "flags": 4
         },
         {
           "id": "6:5812772956445341632",
-          "name": "simpleLong"
+          "name": "simpleLong",
+          "type": 6,
+          "flags": 4
         },
         {
           "id": "7:1065418842978193908",
-          "name": "simpleFloat"
+          "name": "simpleFloat",
+          "type": 7,
+          "flags": 4
         },
         {
           "id": "8:7220777031930057031",
-          "name": "simpleDouble"
+          "name": "simpleDouble",
+          "type": 8,
+          "flags": 4
         },
         {
           "id": "9:6669079511137612739",
-          "name": "simpleString"
+          "name": "simpleString",
+          "type": 9
         },
         {
           "id": "10:8979168811650087844",
-          "name": "simpleByteArray"
+          "name": "simpleByteArray",
+          "type": 23
         }
       ],
       "relations": []
@@ -58,45 +76,64 @@
       "properties": [
         {
           "id": "1:3687894186713655139",
-          "name": "id"
+          "name": "id",
+          "type": 6,
+          "flags": 1
         },
         {
           "id": "2:744491936175748739",
-          "name": "simpleBoolean"
+          "name": "simpleBoolean",
+          "type": 1,
+          "flags": 4
         },
         {
           "id": "3:930101374761292306",
-          "name": "simpleByte"
+          "name": "simpleByte",
+          "type": 2,
+          "flags": 4
         },
         {
           "id": "4:5019932040401094666",
-          "name": "simpleShort"
+          "name": "simpleShort",
+          "type": 3,
+          "flags": 4
         },
         {
           "id": "5:9036275660773544260",
+          "name": "simpleInt",
           "indexId": "1:7769255088226738365",
-          "name": "simpleInt"
+          "type": 5,
+          "flags": 12
         },
         {
           "id": "6:5133250005110876084",
-          "name": "simpleLong"
+          "name": "simpleLong",
+          "type": 6,
+          "flags": 4
         },
         {
           "id": "7:7794332651287140849",
-          "name": "simpleFloat"
+          "name": "simpleFloat",
+          "type": 7,
+          "flags": 4
         },
         {
           "id": "8:2875693831440918677",
-          "name": "simpleDouble"
+          "name": "simpleDouble",
+          "type": 8,
+          "flags": 4
         },
         {
           "id": "9:7453429302134663068",
+          "name": "simpleString",
           "indexId": "2:2825443978184014074",
-          "name": "simpleString"
+          "type": 9,
+          "flags": 2048
         },
         {
           "id": "10:7622112042154959206",
-          "name": "simpleByteArray"
+          "name": "simpleByteArray",
+          "type": 23
         }
       ],
       "relations": []
@@ -106,8 +143,8 @@
   "lastIndexId": "2:2825443978184014074",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
-  "modelVersion": 4,
-  "modelVersionParserMinimum": 4,
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
   "retiredIndexUids": [],
   "retiredPropertyUids": [],
