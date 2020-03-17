@@ -48,36 +48,33 @@ public class MainActivity extends Activity implements Callback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         buttonRun = (Button) findViewById(R.id.buttonRunTest);
-        buttonRun.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                buttonRun.setEnabled(false);
-                View currentFocus = MainActivity.this.getCurrentFocus();
-                if (currentFocus != null) {
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(currentFocus.getWindowToken(), 0);
-                    }
-                    currentFocus.clearFocus();
+        buttonRun.setOnClickListener(view -> {
+            buttonRun.setEnabled(false);
+            View currentFocus = MainActivity.this.getCurrentFocus();
+            if (currentFocus != null) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(currentFocus.getWindowToken(), 0);
                 }
-                boolean objectBox = ((CheckBox) findViewById(R.id.checkBoxObjectBox)).isChecked();
-                boolean realm = ((CheckBox) findViewById(R.id.checkBoxRealm)).isChecked();
-                boolean greenDao = ((CheckBox) findViewById(R.id.checkBoxGreenDao)).isChecked();
-                boolean room = ((CheckBox) findViewById(R.id.checkBoxRoom)).isChecked();
-                TestType type = (TestType) ((Spinner) findViewById(R.id.spinnerTestType)).getSelectedItem();
-
-                int runs;
-                int numberEntities;
-                try {
-                    runs = Integer.parseInt(((EditText) findViewById(R.id.editTextRuns)).getText().toString());
-                    numberEntities =
-                            Integer.parseInt(((EditText) findViewById(R.id.editTextNumberEntities)).getText().toString());
-                } catch (NumberFormatException e) {
-                    textViewResults.append(e.getMessage() + "\n");
-                    return;
-                }
-                runTests(type, runs, numberEntities, objectBox, realm, greenDao, room);
+                currentFocus.clearFocus();
             }
+            boolean objectBox = ((CheckBox) findViewById(R.id.checkBoxObjectBox)).isChecked();
+            boolean realm = ((CheckBox) findViewById(R.id.checkBoxRealm)).isChecked();
+            boolean greenDao = ((CheckBox) findViewById(R.id.checkBoxGreenDao)).isChecked();
+            boolean room = ((CheckBox) findViewById(R.id.checkBoxRoom)).isChecked();
+            TestType type = (TestType) ((Spinner) findViewById(R.id.spinnerTestType)).getSelectedItem();
+
+            int runs;
+            int numberEntities;
+            try {
+                runs = Integer.parseInt(((EditText) findViewById(R.id.editTextRuns)).getText().toString());
+                numberEntities =
+                        Integer.parseInt(((EditText) findViewById(R.id.editTextNumberEntities)).getText().toString());
+            } catch (NumberFormatException e) {
+                textViewResults.append(e.getMessage() + "\n");
+                return;
+            }
+            runTests(type, runs, numberEntities, objectBox, realm, greenDao, room);
         });
         ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, TestType.ALL);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -116,12 +113,7 @@ public class MainActivity extends Activity implements Callback {
     @Override
     public void done() {
         testRunner = null;
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                buttonRun.setEnabled(true);
-            }
-        });
+        runOnUiThread(() -> buttonRun.setEnabled(true));
     }
 
 }

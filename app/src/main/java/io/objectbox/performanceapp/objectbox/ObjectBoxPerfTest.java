@@ -379,12 +379,7 @@ public class ObjectBoxPerfTest extends PerfTest {
 
         startBenchmark("query");
         if(inReadTx) {
-            store.runInReadTx(new Runnable() {
-                @Override
-                public void run() {
-                    getById(idsToLookup);
-                }
-            });
+            store.runInReadTx(() -> getById(idsToLookup));
         } else {
             getById(idsToLookup);
         }

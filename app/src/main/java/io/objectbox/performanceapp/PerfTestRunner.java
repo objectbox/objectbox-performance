@@ -70,24 +70,21 @@ public class PerfTestRunner {
             throw new IllegalStateException("Already running");
         }
         running = true;
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    for (PerfTest test : tests) {
-                        if (!destroyed) {
-                            try {
-                                PerfTestRunner.this.run(type, test);
-                            } catch (Exception e) {
-                                logError("Aborted because of " + e.getMessage());
-                                Log.e("PERF", "Error while running tests", e);
-                            }
+        Thread thread = new Thread(() -> {
+            try {
+                for (PerfTest test : tests) {
+                    if (!destroyed) {
+                        try {
+                            PerfTestRunner.this.run(type, test);
+                        } catch (Exception e) {
+                            logError("Aborted because of " + e.getMessage());
+                            Log.e("PERF", "Error while running tests", e);
                         }
                     }
-                } finally {
-                    running = false;
-                    callback.done();
                 }
+            } finally {
+                running = false;
+                callback.done();
             }
         });
         thread.setPriority(Thread.MAX_PRIORITY);
@@ -109,33 +106,19 @@ public class PerfTestRunner {
     private void log(final String text, final boolean error) {
         Log.d("PERF", text);
         final CountDownLatch joinLatch = new CountDownLatch(1);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (error) {
-                    Spannable errorSpan = new SpannableString(text.concat("\n"));
-                    errorSpan.setSpan(new ForegroundColorSpan(Color.RED), 0, errorSpan.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    textViewResults.append(errorSpan);
-                } else {
-                    textViewResults.append(text.concat("\n"));
-                }
-                // post so just appended text is visible
-                if (scrollViewResults != null) {
-                    textViewResults.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            scrollViewResults.fullScroll(ScrollView.FOCUS_DOWN);
-                        }
-                    });
-                }
-                textViewResults.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        joinLatch.countDown();
-
-                    }
-                }, 20);
+        activity.runOnUiThread(() -> {
+            if (error) {
+                Spannable errorSpan = new SpannableString(text.concat("\n"));
+                errorSpan.setSpan(new ForegroundColorSpan(Color.RED), 0, errorSpan.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                textViewResults.append(errorSpan);
+            } else {
+                textViewResults.append(text.concat("\n"));
             }
+            // post so just appended text is visible
+            if (scrollViewResults != null) {
+                textViewResults.post(() -> scrollViewResults.fullScroll(ScrollView.FOCUS_DOWN));
+            }
+            textViewResults.postDelayed(joinLatch::countDown, 20);
         });
         try {
             boolean ok = joinLatch.await(10, TimeUnit.SECONDS);
