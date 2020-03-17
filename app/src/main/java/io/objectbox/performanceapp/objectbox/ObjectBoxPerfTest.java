@@ -305,7 +305,7 @@ public class ObjectBoxPerfTest extends PerfTest {
         List<SimpleEntityIndexed> entities = prepareAndPutEntitiesIndexed();
 
         final String[] stringsToLookup = new String[numberEntities];
-        for (int i = 0; i < numberEntities; i++) {
+        for (int i = 0; i < stringsToLookup.length; i++) {
             String text = "";
             while (text.length() < 2) {
                 text = entities.get(random.nextInt(numberEntities)).getSimpleString();
@@ -319,7 +319,7 @@ public class ObjectBoxPerfTest extends PerfTest {
                 .equal(SimpleEntityIndexed_.simpleString, "")
                 .parameterAlias("string")
                 .build();
-        for (int i = 0; i < numberEntities; i++) {
+        for (int i = 0; i < stringsToLookup.length; i++) {
             query.setParameter("string", stringsToLookup[i]);
             List<SimpleEntityIndexed> result = query.find();
             accessAllIndexed(result);
