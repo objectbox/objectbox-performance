@@ -17,7 +17,9 @@
 package io.objectbox.performanceapp;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Environment;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -148,10 +150,12 @@ public class PerfTestRunner {
     }
 
     private void run(TestType type, PerfTest test) {
+        printDeviceInfo();
+
         test.setNumberEntities(numberEntities);
         Benchmark benchmark = createBenchmark(type, test, numberEntities);
         test.setBenchmark(benchmark);
-        log("Starting tests with " + numberEntities + " entities at " + new Date());
+        log("\nStarting tests with " + numberEntities + " entities at " + new Date());
         for (int i = 1; i <= runs; i++) {
             log("\n" + test.name() + " " + type + " (" + i + "/" + runs + ")\n" +
                     "------------------------------");
@@ -182,6 +186,18 @@ public class PerfTestRunner {
         }
         test.allTestsComplete();
         log("\nTests done at " + new Date());
+    }
+
+    private void printDeviceInfo() {
+        log("Model: " + Build.MANUFACTURER + " " + Build.MODEL
+                + ", Android " + Build.VERSION.RELEASE);
+
+        ActivityManager activityManager =
+                (ActivityManager) activity.getSystemService(Activity.ACTIVITY_SERVICE);
+        int memoryClassMb = activityManager.getMemoryClass();
+        int largeMemoryClassMb = activityManager.getLargeMemoryClass();
+        log("MemoryClass: " + memoryClassMb + " MB");
+        log("LargeMemoryClass: " + largeMemoryClassMb + " MB");
     }
 
     protected Benchmark createBenchmark(TestType type, PerfTest test, int numberEntities) {
