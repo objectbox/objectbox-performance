@@ -304,7 +304,7 @@ public class ObjectBoxPerfTest extends PerfTest {
     private void runQueryByStringIndexed() {
         List<SimpleEntityIndexed> entities = prepareAndPutEntitiesIndexed();
 
-        final String[] stringsToLookup = new String[numberEntities / 100];
+        final String[] stringsToLookup = new String[numberEntities];
         for (int i = 0; i < stringsToLookup.length; i++) {
             String text = "";
             while (text.length() < 2) {
