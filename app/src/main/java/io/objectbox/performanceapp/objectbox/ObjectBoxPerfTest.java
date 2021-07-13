@@ -110,6 +110,7 @@ public class ObjectBoxPerfTest extends PerfTest {
         box.put(list);
         stopBenchmark();
 
+        //noinspection UnusedAssignment
         list = null;
 
         startBenchmark("load");
@@ -153,6 +154,7 @@ public class ObjectBoxPerfTest extends PerfTest {
         return entity;
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     protected void accessAll(List<SimpleEntity> list) {
         for (SimpleEntity entity : list) {
             entity.getId();
@@ -178,6 +180,7 @@ public class ObjectBoxPerfTest extends PerfTest {
         boxIndexed.put(list);
         stopBenchmark();
 
+        //noinspection UnusedAssignment
         list = null;
 
         startBenchmark("load");
@@ -211,6 +214,7 @@ public class ObjectBoxPerfTest extends PerfTest {
         return entity;
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     protected void accessAllIndexed(List<SimpleEntityIndexed> list) {
         for (SimpleEntityIndexed entity : list) {
             entity.getId();
@@ -394,6 +398,7 @@ public class ObjectBoxPerfTest extends PerfTest {
         }
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private void accessAll(SimpleEntity entity) {
         entity.getId();
         entity.getSimpleBoolean();
