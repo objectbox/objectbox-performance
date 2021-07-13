@@ -16,7 +16,7 @@ apply plugin: 'io.objectbox'
 apply plugin: 'realm-android'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30 // Android 11
 
     buildFeatures {
         viewBinding true
@@ -29,8 +29,8 @@ android {
 
     defaultConfig {
         applicationId "io.objectbox.performanceapp"
-        minSdkVersion 15
-        targetSdkVersion 28
+        minSdkVersion 15 // Android 4.0.3
+        targetSdkVersion 30 // Android 11
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
