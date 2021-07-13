@@ -38,14 +38,9 @@ public class RoomPerfTest extends PerfTest {
         daoIndexed = db.simpleEntityIndexedDao();
 
         if (!versionLoggedOnce) {
-            Cursor cursor = db.query("select sqlite_version() AS sqlite_version", null);
-            if (cursor != null) {
-                try {
-                    if (cursor.moveToFirst()) {
-                        log("SQLite version " + cursor.getString(0));
-                    }
-                } finally {
-                    cursor.close();
+            try (Cursor cursor = db.query("select sqlite_version() AS sqlite_version", null)) {
+                if (cursor.moveToFirst()) {
+                    log("SQLite version " + cursor.getString(0));
                 }
             }
             versionLoggedOnce = true;
@@ -176,15 +171,16 @@ public class RoomPerfTest extends PerfTest {
             stringsToLookup[i] = text;
         }
 
-        long entitiesFound = 0;
         startBenchmark("query");
-        db.beginTransaction();
-        for (int i = 0; i < numberEntities; i++) {
-            List<SimpleEntity> result = dao.whereSimpleStringEq(stringsToLookup[i]);
-            accessAll(result);
-            entitiesFound += result.size();
-        }
-        db.endTransaction();
+        long entitiesFound = db.runInTransaction(() -> {
+            long found = 0;
+            for (int i = 0; i < numberEntities; i++) {
+                List<SimpleEntity> result = dao.whereSimpleStringEq(stringsToLookup[i]);
+                accessAll(result);
+                found += result.size();
+            }
+            return found;
+        });
         stopBenchmark();
         log("Entities found: " + entitiesFound);
     }
@@ -208,15 +204,16 @@ public class RoomPerfTest extends PerfTest {
             stringsToLookup[i] = text;
         }
 
-        long entitiesFound = 0;
         startBenchmark("query");
-        db.beginTransaction();
-        for (int i = 0; i < numberEntities; i++) {
-            List<SimpleEntityIndexed> result = daoIndexed.whereSimpleStringEq(stringsToLookup[i]);
-            accessAllIndexed(result);
-            entitiesFound += result.size();
-        }
-        db.endTransaction();
+        long entitiesFound = db.runInTransaction(() -> {
+            long found = 0;
+            for (int i = 0; i < numberEntities; i++) {
+                List<SimpleEntityIndexed> result = daoIndexed.whereSimpleStringEq(stringsToLookup[i]);
+                accessAllIndexed(result);
+                found += result.size();
+            }
+            return found;
+        });
         stopBenchmark();
         log("Entities found: " + entitiesFound);
     }
