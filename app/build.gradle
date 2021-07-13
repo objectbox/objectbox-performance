@@ -18,8 +18,8 @@ apply plugin: 'realm-android'
 android {
     compileSdkVersion 28
 
-    viewBinding {
-        enabled = true
+    buildFeatures {
+        viewBinding true
     }
 
     compileOptions {
