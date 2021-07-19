@@ -73,7 +73,7 @@ public class MainActivity extends Activity implements Callback {
             runTests(type, runs, numberEntities, objectBox, realm, greenDao, room);
         });
 
-        ArrayAdapter adapter = new ArrayAdapter<>(
+        ArrayAdapter<TestType> adapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_spinner_item,
                 TestType.ALL
