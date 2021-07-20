@@ -63,6 +63,15 @@ public abstract class PerfTest {
         log(benchmark.stop());
     }
 
+    /**
+     * Convenience for {@link #startBenchmark(String)} followed by {@link #stopBenchmark()}.
+     */
+    protected void benchmark(String name, Runnable runnable) {
+        startBenchmark(name);
+        runnable.run();
+        stopBenchmark();
+    }
+
     public String randomString() {
         return RandomValues.createRandomString(random, 0, 100);
     }
