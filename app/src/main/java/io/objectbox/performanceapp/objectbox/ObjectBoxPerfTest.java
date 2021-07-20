@@ -88,10 +88,10 @@ public class ObjectBoxPerfTest extends PerfTest {
                 runQueryByIntegerIndexed();
                 break;
             case TestType.QUERY_ID:
-                runQueryById(false, false);
+                runQueryById(false);
                 break;
             case TestType.QUERY_ID_RANDOM:
-                runQueryById(true, false);
+                runQueryById(true);
                 break;
         }
     }
@@ -374,42 +374,22 @@ public class ObjectBoxPerfTest extends PerfTest {
         return entities;
     }
 
-    private void runQueryById(boolean randomIds, boolean inReadTx) {
-        List<SimpleEntity> entities = prepareAndPutEntities(false);
+    private void runQueryById(boolean randomIds) {
+        prepareAndPutEntities(false);
 
         final long[] idsToLookup = new long[numberEntities];
         for (int i = 0; i < numberEntities; i++) {
             idsToLookup[i] = randomIds ? 1 + random.nextInt(numberEntities) : 1 + i;
         }
 
-        startBenchmark("query");
-        if(inReadTx) {
-            store.runInReadTx(() -> getById(idsToLookup));
-        } else {
-            getById(idsToLookup);
-        }
-        stopBenchmark();
-    }
-
-    private void getById(long[] idsToLookup) {
-        for (int i = 0; i < numberEntities; i++) {
-            SimpleEntity entity = box.get(idsToLookup[i]);
-            accessAll(entity);
-        }
-    }
-
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    private void accessAll(SimpleEntity entity) {
-        entity.getId();
-        entity.getSimpleBoolean();
-        entity.getSimpleByte();
-        entity.getSimpleShort();
-        entity.getSimpleInt();
-        entity.getSimpleLong();
-        entity.getSimpleFloat();
-        entity.getSimpleDouble();
-        entity.getSimpleString();
-        entity.getSimpleByteArray();
+        benchmark("query", () -> {
+            List<SimpleEntity> results = box.get(idsToLookup);
+            if (results.size() != idsToLookup.length) {
+                throw new IllegalStateException("result count " + results.size()
+                        + " is not " + idsToLookup.length);
+            }
+            accessAll(results);
+        });
     }
 
     @Override
