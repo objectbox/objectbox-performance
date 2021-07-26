@@ -326,7 +326,7 @@ public class RealmPerfTest extends PerfTest {
 
         startBenchmark("query");
         for (int i = 0; i < numberEntities; i++) {
-            SimpleEntity entity = realm.where(SimpleEntity.class).equalTo("id", i).findFirst();
+            SimpleEntity entity = realm.where(SimpleEntity.class).equalTo("id", idsToLookup[i]).findFirst();
             accessAll(entity);
         }
         stopBenchmark();
