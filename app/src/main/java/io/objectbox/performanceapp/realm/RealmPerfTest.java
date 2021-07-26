@@ -105,6 +105,7 @@ public class RealmPerfTest extends PerfTest {
         realm.commitTransaction();
         stopBenchmark();
 
+        //noinspection UnusedAssignment
         list = null;
 
         startBenchmark("load");
@@ -149,6 +150,7 @@ public class RealmPerfTest extends PerfTest {
         return entity;
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     protected void accessAll(List<SimpleEntity> list) {
         for (SimpleEntity entity : list) {
             entity.getId();
@@ -184,6 +186,7 @@ public class RealmPerfTest extends PerfTest {
         realm.commitTransaction();
         stopBenchmark();
 
+        //noinspection UnusedAssignment
         list = null;
 
         startBenchmark("load");
@@ -220,6 +223,7 @@ public class RealmPerfTest extends PerfTest {
         return entity;
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     protected void accessAllIndexed(List<SimpleEntityIndexed> list) {
         for (SimpleEntityIndexed entity : list) {
             entity.getId();
@@ -328,6 +332,7 @@ public class RealmPerfTest extends PerfTest {
         stopBenchmark();
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private void accessAll(SimpleEntity entity) {
         entity.getId();
         entity.getSimpleBoolean();
