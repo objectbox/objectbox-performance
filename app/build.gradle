@@ -65,6 +65,6 @@ dependencies {
     implementation "androidx.room:room-runtime:2.3.0"
     annotationProcessor "androidx.room:room-compiler:2.3.0"
     implementation "io.objectbox:objectbox-android:$objectboxVersion"
-    implementation 'org.greenrobot:greendao:3.2.2'
+    implementation 'org.greenrobot:greendao:3.3.0'
     implementation 'org.greenrobot:essentials:3.1.0'
 }

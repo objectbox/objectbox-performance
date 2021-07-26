@@ -74,7 +74,9 @@ public class SimpleEntityIndexedDao extends AbstractDao<SimpleEntityIndexed, Lon
                 "\"SIMPLE_STRING\" TEXT," + // 8: simpleString
                 "\"SIMPLE_BYTE_ARRAY\" BLOB);"); // 9: simpleByteArray
         // Add Indexes
-        db.execSQL("CREATE INDEX " + constraint + "IDX_SIMPLE_ENTITY_INDEXED_SIMPLE_STRING ON SIMPLE_ENTITY_INDEXED" +
+        db.execSQL("CREATE INDEX " + constraint + "IDX_SIMPLE_ENTITY_INDEXED_SIMPLE_INT ON \"SIMPLE_ENTITY_INDEXED\"" +
+                " (\"SIMPLE_INT\");");
+        db.execSQL("CREATE INDEX " + constraint + "IDX_SIMPLE_ENTITY_INDEXED_SIMPLE_STRING ON \"SIMPLE_ENTITY_INDEXED\"" +
                 " (\"SIMPLE_STRING\");");
     }
 

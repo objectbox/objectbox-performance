@@ -52,7 +52,10 @@ public class TestDaoGenerator {
         notNull.addBooleanProperty("simpleBoolean").notNull();
         notNull.addByteProperty("simpleByte").notNull();
         notNull.addShortProperty("simpleShort").notNull();
-        notNull.addIntProperty("simpleInt").notNull();
+        PropertyBuilder simpleInt = notNull.addIntProperty("simpleInt").notNull();
+        if (indexed) {
+            simpleInt.index();
+        }
         notNull.addLongProperty("simpleLong").notNull();
         notNull.addFloatProperty("simpleFloat").notNull();
         notNull.addDoubleProperty("simpleDouble").notNull();

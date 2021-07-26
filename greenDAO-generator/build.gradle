@@ -1,4 +1,9 @@
-apply plugin: 'java'
+apply plugin: "java-library"
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
 
 sourceSets {
     main {
@@ -9,5 +14,5 @@ sourceSets {
 }
 
 dependencies {
-    compile 'org.greenrobot:greendao-generator:3.2.2'
+    implementation("org.greenrobot:greendao-generator:3.3.0")
 }
