@@ -83,8 +83,12 @@ public class MainActivity extends Activity implements Callback {
 
         // Restore type, runs and count or set defaults.
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        int previousTypeSelection = prefs.getInt(PREF_TYPE, 0);
+        if (previousTypeSelection > TestType.ALL.length - 1 || previousTypeSelection < 0) {
+            previousTypeSelection = 0;
+        }
         binding.spinnerTestType
-                .setSelection(prefs.getInt(PREF_TYPE, 1), false);
+                .setSelection(previousTypeSelection, false);
         binding.editTextRuns
                 .setText(String.valueOf(prefs.getInt(PREF_RUNS, 1)));
         binding.editTextNumberEntities
