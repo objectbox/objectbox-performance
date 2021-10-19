@@ -27,7 +27,8 @@ import io.objectbox.performanceapp.PerfTest;
 import io.objectbox.performanceapp.PerfTestRunner;
 import io.objectbox.performanceapp.TestType;
 import io.objectbox.query.Query;
-import io.objectbox.query.QueryBuilder;
+
+import static io.objectbox.query.QueryBuilder.StringOrder.CASE_SENSITIVE;
 
 public class ObjectBoxPerfTest extends PerfTest {
     private BoxStore store;
@@ -250,7 +251,7 @@ public class ObjectBoxPerfTest extends PerfTest {
 
         long entitiesFound = 0;
         Query<SimpleEntity> query = box.query()
-                .equal(SimpleEntity_.simpleString, "")
+                .equal(SimpleEntity_.simpleString, "", CASE_SENSITIVE)
                 .parameterAlias("string")
                 .build();
         for (int i = 0; i < stringsToLookup.length; i++) {
@@ -321,7 +322,7 @@ public class ObjectBoxPerfTest extends PerfTest {
         startBenchmark("query");
         long entitiesFound = 0;
         Query<SimpleEntityIndexed> query = boxIndexed.query()
-                .equal(SimpleEntityIndexed_.simpleString, "", QueryBuilder.StringOrder.CASE_SENSITIVE)
+                .equal(SimpleEntityIndexed_.simpleString, "", CASE_SENSITIVE)
                 .parameterAlias("string")
                 .build();
         for (int i = 0; i < stringsToLookup.length; i++) {
