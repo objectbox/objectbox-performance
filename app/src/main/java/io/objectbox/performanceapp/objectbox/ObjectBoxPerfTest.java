@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 ObjectBox Ltd. All rights reserved.
+ * Copyright 2017-2024 ObjectBox Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -250,15 +250,17 @@ public class ObjectBoxPerfTest extends PerfTest {
         startBenchmark("query");
 
         long entitiesFound = 0;
-        Query<SimpleEntity> query = box.query()
-                .equal(SimpleEntity_.simpleString, "", CASE_SENSITIVE)
-                .parameterAlias("string")
-                .build();
-        for (int i = 0; i < stringsToLookup.length; i++) {
-            query.setParameter("string", stringsToLookup[i]);
-            List<SimpleEntity> result = query.find();
-            accessAll(result);
-            entitiesFound += result.size();
+        try (Query<SimpleEntity> query = box.query(
+                SimpleEntity_.simpleString
+                        .equal("", CASE_SENSITIVE)
+                        .alias("string")
+        ).build()) {
+            for (int i = 0; i < stringsToLookup.length; i++) {
+                query.setParameter("string", stringsToLookup[i]);
+                List<SimpleEntity> result = query.find();
+                accessAll(result);
+                entitiesFound += result.size();
+            }
         }
         stopBenchmark();
         log("Entities found: " + entitiesFound);
@@ -277,15 +279,17 @@ public class ObjectBoxPerfTest extends PerfTest {
 
         startBenchmark("query");
         long entitiesFound = 0;
-        Query<SimpleEntity> query = box.query()
-                .equal(SimpleEntity_.simpleInt, 0)
-                .parameterAlias("int")
-                .build();
-        for (int i = 0; i < numberEntities; i++) {
-            query.setParameter("int", valuesToLookup[i]);
-            List<SimpleEntity> result = query.find();
-            accessAll(result);
-            entitiesFound += result.size();
+        try (Query<SimpleEntity> query = box.query(
+                SimpleEntity_.simpleInt
+                        .equal(0)
+                        .alias("int")
+        ).build()) {
+            for (int i = 0; i < numberEntities; i++) {
+                query.setParameter("int", valuesToLookup[i]);
+                List<SimpleEntity> result = query.find();
+                accessAll(result);
+                entitiesFound += result.size();
+            }
         }
         stopBenchmark();
         log("Entities found: " + entitiesFound);
@@ -321,15 +325,17 @@ public class ObjectBoxPerfTest extends PerfTest {
 
         startBenchmark("query");
         long entitiesFound = 0;
-        Query<SimpleEntityIndexed> query = boxIndexed.query()
-                .equal(SimpleEntityIndexed_.simpleString, "", CASE_SENSITIVE)
-                .parameterAlias("string")
-                .build();
-        for (int i = 0; i < stringsToLookup.length; i++) {
-            query.setParameter("string", stringsToLookup[i]);
-            List<SimpleEntityIndexed> result = query.find();
-            accessAllIndexed(result);
-            entitiesFound += result.size();
+        try (Query<SimpleEntityIndexed> query = boxIndexed.query(
+                SimpleEntityIndexed_.simpleString
+                        .equal("", CASE_SENSITIVE)
+                        .alias("string")
+        ).build()) {
+            for (int i = 0; i < stringsToLookup.length; i++) {
+                query.setParameter("string", stringsToLookup[i]);
+                List<SimpleEntityIndexed> result = query.find();
+                accessAllIndexed(result);
+                entitiesFound += result.size();
+            }
         }
         stopBenchmark();
         log("Entities found: " + entitiesFound);
@@ -345,15 +351,17 @@ public class ObjectBoxPerfTest extends PerfTest {
 
         startBenchmark("query");
         long entitiesFound = 0;
-        Query<SimpleEntityIndexed> query = boxIndexed.query()
-                .equal(SimpleEntityIndexed_.simpleInt, 0)
-                .parameterAlias("int")
-                .build();
-        for (int i = 0; i < numberEntities; i++) {
-            query.setParameter("int", valuesToLookup[i]);
-            List<SimpleEntityIndexed> result = query.find();
-            accessAllIndexed(result);
-            entitiesFound += result.size();
+        try (Query<SimpleEntityIndexed> query = boxIndexed.query(
+                SimpleEntityIndexed_.simpleInt
+                        .equal(0)
+                        .alias("int")
+        ).build()) {
+            for (int i = 0; i < numberEntities; i++) {
+                query.setParameter("int", valuesToLookup[i]);
+                List<SimpleEntityIndexed> result = query.find();
+                accessAllIndexed(result);
+                entitiesFound += result.size();
+            }
         }
         stopBenchmark();
         log("Entities found: " + entitiesFound);
