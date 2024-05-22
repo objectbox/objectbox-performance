@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 ObjectBox Ltd. All rights reserved.
+ * Copyright 2017-2024 ObjectBox Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
@@ -29,6 +28,7 @@ import android.widget.EditText;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.preference.PreferenceManager;
 import io.objectbox.performanceapp.PerfTestRunner.Callback;
 import io.objectbox.performanceapp.databinding.ActivityMainBinding;
 import io.objectbox.performanceapp.greendao.GreendaoPerfTest;
