@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "io.objectbox.performanceapp"
-    compileSdk = 30 // Android 11
+    compileSdk = 34 // Android 14
 
     buildFeatures {
         viewBinding = true
@@ -56,8 +56,8 @@ tasks.withType(JavaCompile::class).configureEach {
 }
 
 dependencies {
-    implementation("androidx.room:room-runtime:2.3.0")
-    annotationProcessor("androidx.room:room-compiler:2.3.0")
+    implementation("androidx.room:room-runtime:2.6.1")
+    annotationProcessor("androidx.room:room-compiler:2.6.1")
     implementation("org.greenrobot:greendao:3.3.0")
     implementation("org.greenrobot:essentials:3.1.0")
 }
