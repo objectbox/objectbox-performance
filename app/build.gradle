@@ -17,7 +17,7 @@ android {
 
     defaultConfig {
         applicationId "io.objectbox.performanceapp"
-        minSdkVersion 16 // Android 4.1
+        minSdkVersion 19 // Android 4.4
         targetSdkVersion 30 // Android 11
         versionCode 1
         versionName "1.0"
@@ -52,7 +52,6 @@ android {
 dependencies {
     implementation "androidx.room:room-runtime:2.3.0"
     annotationProcessor "androidx.room:room-compiler:2.3.0"
-    implementation "io.objectbox:objectbox-android:$objectboxVersion"
     implementation 'org.greenrobot:greendao:3.3.0'
     implementation 'org.greenrobot:essentials:3.1.0'
 }
