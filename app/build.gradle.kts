@@ -1,62 +1,63 @@
-apply plugin: 'com.android.application'
-apply plugin: 'io.objectbox'
-apply plugin: 'realm-android'
+plugins {
+    id("com.android.application")
+    id("io.objectbox")
+    id("realm-android")
+}
 
 android {
-    namespace 'io.objectbox.performanceapp'
-    compileSdkVersion 30 // Android 11
+    namespace = "io.objectbox.performanceapp"
+    compileSdk = 30 // Android 11
 
     buildFeatures {
-        viewBinding true
+        viewBinding = true
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     defaultConfig {
-        applicationId "io.objectbox.performanceapp"
-        minSdkVersion 19 // Android 4.4
-        targetSdkVersion 30 // Android 11
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        applicationId = "io.objectbox.performanceapp"
+        minSdk = 19 // Android 4.4
+        targetSdk = 30 // Android 11
+        versionCode = 1
+        versionName = "1.0"
 
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+                arguments(mapOf("room.schemaLocation" to "$projectDir/schemas"))
             }
         }
     }
 
     buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.debug
+        getByName("release") {
+            isMinifyEnabled = false
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("debug")
         }
-        releaseDebugCert {
-            initWith release
+        create("releaseDebugCert") {
+            initWith(getByName("release"))
             // Just to use without checkjni
-            signingConfig signingConfigs.debug
+            signingConfig = signingConfigs.getByName("debug")
         }
-        debugJniNoDebug {
-            initWith debug
+        create("debugJniNoDebug") {
+            initWith(getByName("debug"))
             // Just to use without checkjni
-            jniDebuggable false
+            isJniDebuggable = false
         }
     }
 }
 
 // Print deprecation warnings like Kotlin
-tasks.withType(JavaCompile).configureEach {
-    options.deprecation = true
+tasks.withType(JavaCompile::class).configureEach {
+    options.isDeprecation = true
 }
 
 dependencies {
-    implementation "androidx.room:room-runtime:2.3.0"
-    annotationProcessor "androidx.room:room-compiler:2.3.0"
-    implementation 'org.greenrobot:greendao:3.3.0'
-    implementation 'org.greenrobot:essentials:3.1.0'
+    implementation("androidx.room:room-runtime:2.3.0")
+    annotationProcessor("androidx.room:room-compiler:2.3.0")
+    implementation("org.greenrobot:greendao:3.3.0")
+    implementation("org.greenrobot:essentials:3.1.0")
 }
