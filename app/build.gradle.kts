@@ -20,7 +20,7 @@ android {
     defaultConfig {
         applicationId = "io.objectbox.performanceapp"
         minSdk = 19 // Android 4.4
-        targetSdk = 30 // Android 11
+        targetSdk = 34 // Android 14
         versionCode = 1
         versionName = "1.0"
 
