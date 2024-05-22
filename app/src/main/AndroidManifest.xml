@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="io.objectbox.performanceapp"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Note: We do not request the permission on Android 6+ - user has to add it manually using App Info-->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>

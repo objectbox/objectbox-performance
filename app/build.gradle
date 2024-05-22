@@ -3,6 +3,7 @@ apply plugin: 'io.objectbox'
 apply plugin: 'realm-android'
 
 android {
+    namespace 'io.objectbox.performanceapp'
     compileSdkVersion 30 // Android 11
 
     buildFeatures {
