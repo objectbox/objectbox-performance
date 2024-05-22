@@ -56,6 +56,7 @@ tasks.withType(JavaCompile::class).configureEach {
 }
 
 dependencies {
+    implementation("androidx.preference:preference:1.2.1")
     implementation("androidx.room:room-runtime:2.6.1")
     annotationProcessor("androidx.room:room-compiler:2.6.1")
     implementation("org.greenrobot:greendao:3.3.0")
